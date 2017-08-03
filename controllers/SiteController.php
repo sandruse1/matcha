@@ -105,17 +105,23 @@ class SiteController extends Controller
           PRIMARY KEY (`user_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8
         ');
         $user_table->query();
-
+        $post = User::find()->asArray()->where(['user_name' => "sasfdfda"])->all();
         $user = new User();
+        echo '<br>';
+        echo '<br>';
+        echo '<br>';
+        echo '<br>';
+        echo '<br>';
 
+        var_dump($post);
         if ($user->load(Yii::$app->request->post())){
 
-            if ($user->save()){
-                Yii::$app->session->setFlash('success',  'ok');
-                return $this->refresh();
-            }else{
-                Yii::$app->session->setFlash('error',  'ko');
-            }
+//            if ($user->save()){
+//                Yii::$app->session->setFlash('success',  'ok');
+//                return $this->refresh();
+//            }else{
+//                Yii::$app->session->setFlash('error',  'ko');
+//            }
 
         }
 
