@@ -39,11 +39,9 @@ class User extends ActiveRecord
             [ ['user_name', 'user_secondname', 'user_email', 'user_login', 'user_password', 'user_rep_password'], 'trim'],
             [ 'user_email' , 'email'],
           [ ['user_name', 'user_secondname'] , 'string', 'length' => [2, 20]],
-            [ ['user_password', 'user_rep_password'] , 'string', 'length' => [8, 20]],
+            [ ['user_password', 'user_rep_password'] , 'string', 'min' => 8],
             ['user_rep_password', 'compare', 'compareAttribute' => 'user_password'],
-
+            ['user_login', 'string' , 'length' => [8 , 16] ],
         ];
     }
-
-
 }

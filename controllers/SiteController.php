@@ -12,9 +12,6 @@ use app\models\User;
 
 class SiteController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
     public function behaviors()
     {
         return [
@@ -38,9 +35,6 @@ class SiteController extends Controller
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function actions()
     {
         return [
@@ -54,42 +48,7 @@ class SiteController extends Controller
         ];
     }
 
-    /**
-     * Displays homepage.
-     *
-     * @return string
-     */
     public function actionIndex()
-    {
-        return $this->render('index');
-    }
-
-    /**
-     * Login action.
-     *
-     * @return string
-     */
-    public function actionLogin()
-    {
-        return $this->render('login');
-    }
-
-    /**
-     * Displays contact page.
-     *
-     * @return string
-     */
-    public function actionContact()
-    {
-        return $this->render('contact');
-    }
-
-    /**
-     * Displays signup page.
-     *
-     * @return string
-     */
-    public function actionSignup()
     {
         $user_table = Yii::$app->db->createCommand('
           CREATE TABLE IF NOT EXISTS `user` (
@@ -105,37 +64,61 @@ class SiteController extends Controller
           PRIMARY KEY (`user_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8
         ');
         $user_table->query();
-        $post = User::find()->asArray()->where(['user_name' => "sasfdfda"])->all();
-        $user = new User();
-        echo '<br>';
-        echo '<br>';
-        echo '<br>';
-        echo '<br>';
-        echo '<br>';
-
-        var_dump($post);
-        if ($user->load(Yii::$app->request->post())){
-
-//            if ($user->save()){
-//                Yii::$app->session->setFlash('success',  'ok');
-//                return $this->refresh();
-//            }else{
-//                Yii::$app->session->setFlash('error',  'ko');
-//            }
-
-        }
-
-        return $this->render('signup', compact('user'));
+        return $this->render('index');
     }
 
-    /**
-     * Displays about page.
-     *
-     * @return string
-     */
+    public function actionContact()
+    {
+        return $this->render('contact');
+    }
+
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    public function actionLogin()
+    {
+        $user = new User();
+//        if ($user->load(Yii::$app->request->post())){
+//            $post = Yii::$app->request->post('User');
+//            $post = $post['user_login'];
+//            $my_request = User::find()->asArray()->where(['user_login' => $post])->all();
+//            if ($my_request == NULL) {
+//                if ($user->save()) {
+//                    Yii::$app->session->setFlash('success', 'You have successfully signed up, now you can login to Matcha');
+//                    return $this->refresh();
+//                }else {
+//                    Yii::$app->session->setFlash('error',  'Please fill in all the fields correctly');
+//                }
+//            }else {
+//                Yii::$app->session->setFlash('error', 'Such login already registered');
+//            }
+//        }
+        return $this->render('login', compact('user'));
+    }
+
+    public function actionSignup()
+    {
+        $user = new User();
+        if ($user->load(Yii::$app->request->post())){
+            $post = Yii::$app->request->post('User');
+            $user->user_password = Yii::$app->getSecurity()->generatePasswordHash($user->user_password);
+            $user->user_rep_password = Yii::$app->getSecurity()->generatePasswordHash($user->user_rep_password);
+            $post = $post['user_login'];
+            $my_request = User::find()->asArray()->where(['user_login' => $post])->all();
+            if ($my_request == NULL) {
+                if ($user->save()) {
+                    Yii::$app->session->setFlash('success', 'You have successfully signed up, now you can login to Matcha');
+                    return $this->refresh();
+                }else {
+                    Yii::$app->session->setFlash('error',  'Please fill in all the fields correctly');
+                }
+            }else {
+                Yii::$app->session->setFlash('error', 'Such login already registered');
+            }
+        }
+        return $this->render('signup', compact('user'));
     }
 
 }
