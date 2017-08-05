@@ -41,7 +41,7 @@ class User extends ActiveRecord
           [ ['user_name', 'user_secondname'] , 'string', 'length' => [2, 20]],
             [ ['user_password', 'user_rep_password'] , 'string', 'min' => 8],
             ['user_rep_password', 'compare', 'compareAttribute' => 'user_password'],
-            ['user_login', 'string' , 'length' => [8 , 16] ],
+            ['user_login', 'string' , 'length' => [6 , 12] ],
         ];
     }
 }

@@ -15,8 +15,6 @@ $this->title = 'Login';
 
     <?php $form = ActiveForm::begin() ?>
     <div class="container">
-
-
         <div class="omb_login ">
             <h3 class="omb_authTitle">Login or <a href="signup">Sign up</a></h3>
             <div class="row omb_row-sm-offset-3 omb_socialButtons mycenter">
@@ -26,7 +24,6 @@ $this->title = 'Login';
                         <span class="hidden-xs">Facebook</span>
                     </a>
                 </div>
-
                 <div class="col-xs-4 col-sm-2">
                     <a href="#" class="btn btn-lg btn-block omb_btn-google">
                         <i class="fa fa-google-plus visible-xs"></i>
@@ -40,39 +37,38 @@ $this->title = 'Login';
                     <span class="omb_spanOr">or</span>
                 </div>
             </div>
+            <?php if (Yii::$app->session->hasFlash('error')): ?>
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <?php echo Yii::$app->session->getFlash('error'); ?>
+                </div>
+            <?php endif; ?>
             <div class="row omb_row-sm-offset-3">
                 <div class="col-xs-12 col-sm-6">
-                    <form class="omb_loginForm" action="" autocomplete="off" method="POST">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-<!--                            <input type="text" class="form-control" name="username" placeholder="Login">-->
-                            <?= $form->field($user, 'user_login') ?>
+                        <div class="form-group">
+                            <?= $form->field($login, 'user_login')
+                                ->textInput([ 'placeholder' => 'Login', 'class' => 'form-control'])
+                                ->label(false) ?>
                         </div>
                         <span class="help-block"></span>
-
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                            <input  type="password" class="form-control" name="password" placeholder="Password">
-                            <?= $form->field($user, 'user_password')->passwordInput() ?>
+                        <div class="form-group">
+                            <?= $form->field($login, 'user_password')
+                                ->passwordInput([ 'placeholder' => 'Password', 'class' => 'form-control'])
+                                ->label(false) ?>
                         </div>
                         <br>
-
-                        <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
-                    </form>
+                        <?= Html::submitButton('Login', ['class' => 'btn btn-lg btn-primary btn-block', 'id' => 'loginSubmit']) ?>
                 </div>
             </div>
             <div class="row omb_row-sm-offset-3">
                 <div class="col-xs-12 col-sm-3"></div>
                 <div class="col-xs-12 col-sm-3">
                     <p class="omb_forgotPwd">
-                        <a href="#">Forgot password?</a>
+                        <a href="forgot">Forgot password?</a>
                     </p>
                 </div>
             </div>
         </div>
-
-
-
     </div>
     <?php $form = ActiveForm::end() ?>
 

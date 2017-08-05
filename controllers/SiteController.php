@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Login;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -79,23 +80,24 @@ class SiteController extends Controller
 
     public function actionLogin()
     {
-        $user = new User();
-//        if ($user->load(Yii::$app->request->post())){
-//            $post = Yii::$app->request->post('User');
-//            $post = $post['user_login'];
-//            $my_request = User::find()->asArray()->where(['user_login' => $post])->all();
-//            if ($my_request == NULL) {
-//                if ($user->save()) {
-//                    Yii::$app->session->setFlash('success', 'You have successfully signed up, now you can login to Matcha');
-//                    return $this->refresh();
-//                }else {
-//                    Yii::$app->session->setFlash('error',  'Please fill in all the fields correctly');
-//                }
-//            }else {
-//                Yii::$app->session->setFlash('error', 'Such login already registered');
-//            }
-//        }
-        return $this->render('login', compact('user'));
+        $login = new Login();
+        if ($login->load(Yii::$app->request->post())){
+            $post = Yii::$app->request->post('Login');
+            $user_login = $post['user_login'];
+            $user_form_pass = $post['user_password'];
+            $my_request = User::find()->asArray()->where(['user_login' => $user_login])->all();
+            if ($my_request) {
+                $user_base_pass = $my_request[0]['user_password'];
+                if (Yii::$app->getSecurity()->validatePassword($user_form_pass, $user_base_pass)) {
+                    echo "ok";
+                } else {
+                    Yii::$app->session->setFlash('error', 'The password you entered is invalid. Please try again');
+                }
+            }else {
+                Yii::$app->session->setFlash('error', 'No such registered login');
+            }
+        }
+        return $this->render('login', compact('login'));
     }
 
     public function actionSignup()
@@ -103,12 +105,13 @@ class SiteController extends Controller
         $user = new User();
         if ($user->load(Yii::$app->request->post())){
             $post = Yii::$app->request->post('User');
-            $user->user_password = Yii::$app->getSecurity()->generatePasswordHash($user->user_password);
-            $user->user_rep_password = Yii::$app->getSecurity()->generatePasswordHash($user->user_rep_password);
             $post = $post['user_login'];
             $my_request = User::find()->asArray()->where(['user_login' => $post])->all();
             if ($my_request == NULL) {
-                if ($user->save()) {
+                if ($user->validate()) {
+                    $user->user_password = Yii::$app->getSecurity()->generatePasswordHash($user->user_password);
+                    $user->user_rep_password = $user->user_password;
+                    $user->save(false);
                     Yii::$app->session->setFlash('success', 'You have successfully signed up, now you can login to Matcha');
                     return $this->refresh();
                 }else {
@@ -121,4 +124,30 @@ class SiteController extends Controller
         return $this->render('signup', compact('user'));
     }
 
+    public function actionForgot(){
+        $forgot = new Login();
+        if ($forgot->load(Yii::$app->request->post())) {
+            $post = Yii::$app->request->post('Login');
+            $post = $post['user_email'];
+            $my_request = User::find()->asArray()->where(['user_email' => $post])->all();
+            if ($my_request){
+                $new_pass = Login::passwordGenerate();
+                $user = User::findOne(['user_email' => $post]);
+                $user->user_password = Yii::$app->getSecurity()->generatePasswordHash($new_pass);
+                $user->user_rep_password = $user->user_password;
+                $user->save();
+                Yii::$app->mailer->compose()
+                    ->setFrom('andrusechko@gmail.com')
+                    ->setTo($post)
+                    ->setSubject('Reset Password')
+                    ->setTextBody("Your new password for Matchaff is - ".$new_pass)
+                    ->send();
+                Yii::$app->session->setFlash('success', 'We send you an e-mail message. Please check your email for further instructions');
+                return $this->refresh();
+            }else {
+                Yii::$app->session->setFlash('error',  'No such registered E-mail address');
+            }
+        }
+        return $this->render('forgot', compact('forgot'));
+    }
 }

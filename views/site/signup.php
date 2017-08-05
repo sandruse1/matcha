@@ -11,16 +11,11 @@ $this->title = 'Sign up';
 
 ?>
 <div class="site-login">
-
     <?php $form = ActiveForm::begin() ?>
     <div class="container">
         <div class="row">
             <div class="panel panel-primary">
                 <div class="panel-body">
-
-
-                    <form method="POST" action="#" role="form">
-
                         <div class="omb_login">
                         <h1 class="omb_authTitle">Sign up</h1>
                         <div class="row omb_row-sm-offset-3 omb_socialButtons mycenter">
@@ -30,7 +25,6 @@ $this->title = 'Sign up';
                                     <span class="hidden-xs">Facebook</span>
                                 </a>
                             </div>
-
                             <div class="col-xs-4 col-sm-2">
                                 <a href="#" class="btn btn-lg btn-block omb_btn-google">
                                     <i class="fa fa-google-plus visible-xs"></i>
@@ -38,7 +32,6 @@ $this->title = 'Sign up';
                                 </a>
                             </div>
                         </div>
-
                         <div class="row omb_row-sm-offset-3 omb_loginOr">
                             <div class="col-xs-12 col-sm-6">
                                 <hr class="omb_hrOr">
@@ -46,8 +39,6 @@ $this->title = 'Sign up';
                             </div>
                         </div>
                         </div>
-
-
                         <?php if (Yii::$app->session->hasFlash('success')): ?>
                             <div class="alert alert-success alert-dismissible" role="alert">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -83,12 +74,9 @@ $this->title = 'Sign up';
                         </div>
                         <hr>
                         <p></p>Already have an account? <a href="login">Sign in</a></p>
-                    </form>
                 </div>
             </div>
         </div>
     </div>
     <?php $form = ActiveForm::end() ?>
-
-
 </div>
