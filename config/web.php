@@ -51,6 +51,23 @@ $config = [
                 '<alias:index|about|contact|signup|login|forgot>' => 'site/<alias>',
             ],
         ],
+        'facebook' => [
+            'class' => 'yii\authclient\clients\Facebook',
+            'authUrl' => 'https://www.facebook.com/dialog/oauth?display=popup',
+            'clientId' => '302902180181988',
+            'clientSecret' => '53debebd7a56476e4b9ed58206f7d425',
+        ],
+        'authClientCollection' => [
+            'class' => 'yii\authclient\Collection',
+            'clients' => [
+                'facebook' => [
+                    'class' => 'yii\authclient\clients\Facebook',
+                    'clientId' => '302902180181988',
+                    'clientSecret' => '53debebd7a56476e4b9ed58206f7d425',
+                ],
+                // etc.
+            ],
+        ]
 //        'assetManager' => [
 //            'basePath' => '@webroot/assets',
 //            'baseUrl' => '@web/assets'

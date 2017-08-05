@@ -7,6 +7,7 @@
 use yii\widgets\ActiveField;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\authclient\widgets\AuthChoice;
 
 $this->title = 'Login';
 
@@ -31,6 +32,7 @@ $this->title = 'Login';
                     </a>
                 </div>
             </div>
+            <?= yii\authclient\widgets\AuthChoice::widget(['baseAuthUrl' => ['site/auth']]) ?>
             <div class="row omb_row-sm-offset-3 omb_loginOr">
                 <div class="col-xs-12 col-sm-6">
                     <hr class="omb_hrOr">
