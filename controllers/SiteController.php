@@ -15,8 +15,6 @@ use yii\helpers\Url;
 
 class SiteController extends Controller
 {
-    public $successUrl = 'http://localhost:8080/matcha/web/profiledata';
-
     public function behaviors()
     {
         return [
@@ -53,7 +51,6 @@ class SiteController extends Controller
             'auth' => [
                 'class' => 'yii\authclient\AuthAction',
                 'successCallback' => [$this, 'successCallback'],
-                'successUrl' => $this->successUrl,
             ],
         ];
     }
@@ -70,13 +67,15 @@ class SiteController extends Controller
             $user->user_name = $full_name[0];
             $user->user_secondname = $full_name[1];
             $user->user_email = $attributes['email'];
+            $user->user_facebook_id = $attributes['id'];
             $user->save(false);
             $session['loged_user'] = $attributes;
+
         }
         else{
             $session['loged_user'] = $attributes;
         }
-
+        $this->redirect('http://localhost:8080/matcha/web/profiledata');
     }
 
     public function actionIndex()
@@ -86,12 +85,20 @@ class SiteController extends Controller
           `user_id` INT (11) UNSIGNED NOT NULL AUTO_INCREMENT,
           `user_name` VARCHAR (100) NOT NULL ,
           `user_secondname` VARCHAR (100) NOT NULL,
+          `user_sex` INT (2),
+          `user_about` VARCHAR (1000),
+          `user_interest` VARCHAR (1000),
+          `user_orientation` INT (2),
           `user_email` VARCHAR (100) NOT NULL,
           `user_login` VARCHAR (20) ,
+          `user_avatar` VARCHAR (255),
+          `user_day_of_birth` VARCHAR (15),
+          `user_phone` VARCHAR (20),
+          `user_photo` VARCHAR (1000),
+          `user_facebook_id` BIGINT (30) UNSIGNED,
+          `user_profile_complete` INT (1) DEFAULT \'0\',
           `user_password` VARCHAR (1000) ,
-          `user_rep_password` VARCHAR (1000) ,
-          `user_sex` INT (1)  DEFAULT \'0\',
-          `user_photo` VARCHAR (500) DEFAULT \' \',
+          `user_rep_password` VARCHAR (1000),
           PRIMARY KEY (`user_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8
         ');
         $user_table->query();
@@ -119,7 +126,9 @@ class SiteController extends Controller
             if ($my_request) {
                 $user_base_pass = $my_request[0]['user_password'];
                 if (Yii::$app->getSecurity()->validatePassword($user_form_pass, $user_base_pass)) {
-                    echo "ok";
+                    $session = Yii::$app->session;
+                    $session['loged_user'] = $my_request[0]['user_name']." ".$my_request[0]['user_secondname'];
+                    $this->redirect('http://localhost:8080/matcha/web/profiledata');
                 } else {
                     Yii::$app->session->setFlash('error', 'The password you entered is invalid. Please try again');
                 }

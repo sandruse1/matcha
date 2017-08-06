@@ -20,7 +20,7 @@ $this->title = 'Login';
             <h3 class="omb_authTitle">Login or <a href="signup">Sign up</a></h3>
             <div class="row omb_row-sm-offset-3 omb_socialButtons mycenter">
                 <div class="col-xs-4 col-sm-2">
-                    <a href="#" class="btn btn-lg btn-block omb_btn-facebook">
+                    <a href="/matcha/web/site/auth?authclient=facebook" class="btn btn-lg btn-block omb_btn-facebook">
                         <i class="fa fa-facebook visible-xs"></i>
                         <span class="hidden-xs">Facebook</span>
                     </a>
@@ -32,7 +32,6 @@ $this->title = 'Login';
                     </a>
                 </div>
             </div>
-            <?= yii\authclient\widgets\AuthChoice::widget(['baseAuthUrl' => ['site/auth']]) ?>
             <div class="row omb_row-sm-offset-3 omb_loginOr">
                 <div class="col-xs-12 col-sm-6">
                     <hr class="omb_hrOr">
