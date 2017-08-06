@@ -48,7 +48,13 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+//                'site/success_login' => 'user/profiledata',
                 '<alias:index|about|contact|signup|login|forgot>' => 'site/<alias>',
+                'search' => 'user/search',
+                'account' => 'user/account',
+                'message' => 'user/message',
+                'profiledata' => 'user/profiledata',
+                'settings' => 'user/settings',
             ],
         ],
         'facebook' => [

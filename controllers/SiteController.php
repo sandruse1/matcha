@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Login;
+use phpDocumentor\Reflection\Location;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -14,7 +15,7 @@ use yii\helpers\Url;
 
 class SiteController extends Controller
 {
-    public $successUrl = 'Success';
+    public $successUrl = 'http://localhost:8080/matcha/web/profiledata';
 
     public function behaviors()
     {
@@ -52,6 +53,7 @@ class SiteController extends Controller
             'auth' => [
                 'class' => 'yii\authclient\AuthAction',
                 'successCallback' => [$this, 'successCallback'],
+                'successUrl' => $this->successUrl,
             ],
         ];
     }
@@ -59,19 +61,22 @@ class SiteController extends Controller
     public function successCallback($client)
     {
         $attributes = $client->getUserAttributes();
+        $session = Yii::$app->session;
+        $user = new User();
+        $if_exist = $user->find()->where(['user_email' => $attributes['email']])->one();
 
-        die(print_r($attributes));
-
-        $user = User::find()->where(['user_email' => $attributes['email']])->one();
-
-        if (!empty($user)){
-            Yii::$app->user->login($user);
+        if ($if_exist == NULL){
+            $full_name = explode(" ",$attributes['name']);
+            $user->user_name = $full_name[0];
+            $user->user_secondname = $full_name[1];
+            $user->user_email = $attributes['email'];
+            $user->save(false);
+            $session['loged_user'] = $attributes;
         }
         else{
-            $session = Yii::$app->session;
-            $session['attributes'] = $attributes;
-            $this->successUrl = \yii\helpers\Url::to(['singup']);
+            $session['loged_user'] = $attributes;
         }
+
     }
 
     public function actionIndex()
@@ -82,9 +87,9 @@ class SiteController extends Controller
           `user_name` VARCHAR (100) NOT NULL ,
           `user_secondname` VARCHAR (100) NOT NULL,
           `user_email` VARCHAR (100) NOT NULL,
-          `user_login` VARCHAR (20) NOT NULL,
-          `user_password` VARCHAR (1000) NOT NULL,
-          `user_rep_password` VARCHAR (1000) NOT NULL,
+          `user_login` VARCHAR (20) ,
+          `user_password` VARCHAR (1000) ,
+          `user_rep_password` VARCHAR (1000) ,
           `user_sex` INT (1)  DEFAULT \'0\',
           `user_photo` VARCHAR (500) DEFAULT \' \',
           PRIMARY KEY (`user_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8
