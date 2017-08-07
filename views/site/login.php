@@ -26,7 +26,7 @@ $this->title = 'Login';
                     </a>
                 </div>
                 <div class="col-xs-4 col-sm-2">
-                    <a href="" class="btn btn-lg btn-block omb_btn-google">
+                    <a href="https://api.instagram.com/oauth/access_token?client_id=0043d080e927409aa65d80fa2dffdf4e&client_secret=ebfe701eaa2245b0833d33c834d16af7&redirect_uri=http://localhost:8080/matcha/web/profiledata#_=_&grant_type=authorization_code" class="btn btn-lg btn-block omb_btn-google">
                         <i class="fa fa-google-plus visible-xs"></i>
                         <span class="hidden-xs">Google+</span>
                     </a>

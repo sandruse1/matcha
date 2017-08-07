@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Login;
 use phpDocumentor\Reflection\Location;
 use Yii;
+use yii\authclient\OAuth2;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
@@ -84,6 +85,18 @@ class SiteController extends Controller
 //                $this->redirect('http://localhost:8080/matcha/web/profiledata');
 //            }
 //        }
+    }
+    public function actionInsta(){
+
+//        $actual_link = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
+//var_dump(parse_url('https://api.instagram.c om/oauth/authorize/?client_id=0043d080e927409aa65d80fa2dffdf4e&redirect_uri=http://localhost:8080/matcha/web/site/insta&response_type=token&scope=public_content+basic+likes+relationships+comments+follower_list
+//'));
+        echo Url::toRoute(['#' => 'access_token']);
+echo '<br>';
+      var_dump(Yii::$app->getBasePath());
+//        $sa = file_get_contents('https://api.instagram.com/v1/users/self/?access_token=549213355.0043d08.e0aaa661d2554f1da956c9e65117f113');
+//        var_dump($sa);
+        die();
     }
 
     public function actionIndex()

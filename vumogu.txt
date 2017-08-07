@@ -48,3 +48,12 @@
 		10.1 Add Omniauth strategies for the connection
 		10.2 Импортироват фото с фейсбука или гугл+
 		10.3 Интерактивная карта пользователей сортированых по GPS-локации
+
+
+
+https://api.instagram.com/oauth/access_token?client_id=0043d080e927409aa65d80fa2dffdf4e&redirect_uri=http://localhost:8080/matcha/web/site/insta&grant_type=authorization_code
+
+
+https://api.instagram.com/oauth/authorize/?client_id=0043d080e927409aa65d80fa2dffdf4e&redirect_uri=http://localhost:8080/matcha/web/site/insta&response_type=token&scope=public_content+basic+likes+relationships+comments+follower_list
+
+https://api.instagram.com/v1/users/self/?access_token=549213355.0043d08.e0aaa661d2554f1da956c9e65117f113
