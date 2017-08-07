@@ -4,6 +4,7 @@
 /* @var $form yii\bootstrap\ActiveForm */
 
 use yii\widgets\ActiveField;
+use yii\widgets\MaskedInput;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
@@ -47,15 +48,13 @@ $this->title = 'Profile data';
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="Gender">Gender</label>
                         <?php $profile->user_sex = 1; ?>
-                        <?= $form->field($profile, 'user_sex')->radioList(['1'=>'Male', '0' =>'Female'])->label(false); ?>
+                        <?= $form->field($profile, 'user_sex')->radioList(['1'=>'Male', '0' =>'Female']) ?>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="sexual">Sexual orientation:</label>
                         <?php $profile->user_orientation = 1; ?>
-                        <?= $form->field($profile, 'user_orientation')->radioList(['1'=>'Heterosexual', '0' =>'Homosexual', '2' => 'Bisexual'])->label(false); ?>
+                        <?= $form->field($profile, 'user_orientation')->radioList(['1'=>'Heterosexual', '0' =>'Homosexual', '2' => 'Bisexual']) ?>
                     </div>
 
                     <div class="form-group">
@@ -63,7 +62,7 @@ $this->title = 'Profile data';
                     </div>
 
                     <div class="form-group">
-                        <?= $form->field($profile, 'user_phone')->textInput([ 'placeholder' => 'Primary Phone number', 'class' => 'form-control']) ?>
+                        <?=$form->field($profile,'user_phone')->widget(MaskedInput::className(),['mask'=>'+38 (999) 999-99-99'])->textInput(['placeholder'=>'+38 (999) 999-99-99','class'=>'form-control'])->label('Your phone number');?>
                     </div>
 
                     <div class="form-group">
@@ -78,9 +77,6 @@ $this->title = 'Profile data';
 
                 </fieldset>
             </form>
-        </div>
-        <div class="col-md-2 hidden-xs">
-            <img src="http://websamplenow.com/30/userprofile/images/avatar.jpg" class="img-responsive img-thumbnail ">
         </div>
         <?php $form = ActiveForm::end() ?>
 

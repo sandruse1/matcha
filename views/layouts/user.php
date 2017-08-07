@@ -36,7 +36,6 @@ AppAsset::register($this);
     <?php $session->open();?>
     <?php $loged_user = $session['loged_user'] ?>
     <?php $user_avatar = $session['user_avatar'] ?>
-
     <div class="wrap">
 <?php if ($this->title != 'Profile data'): ?>
         <?php

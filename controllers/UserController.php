@@ -62,6 +62,7 @@ class UserController extends Controller
                     $profile->user_about = $post['user_about'];
                     $profile->user_profile_complete = 1;
                     $profile->save(false);
+                    $session['user_avatar'] = 'avatars/'.$profile->user_id;
                     return $this->render('account');
                 } else {
                     Yii::$app->session->setFlash('error', 'Please fill in all the fields correctly');
@@ -86,13 +87,7 @@ class UserController extends Controller
     }
 
     public function actionExit(){
-        $session = Yii::$app->session;
-        $session->open();
-//        $session['loged_email'] = '';
-//        $session['loged_user'] = '';
-//        $session['user_avatar'] = '';
-        $session->destroy();
-        $this->redirect('http://localhost:8080/matcha/web/index');
+           $this->redirect('http://localhost:8080/matcha/web/index');
     }
 
 }
