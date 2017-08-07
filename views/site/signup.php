@@ -20,7 +20,7 @@ $this->title = 'Sign up';
                         <h1 class="omb_authTitle">Sign up</h1>
                         <div class="row omb_row-sm-offset-3 omb_socialButtons mycenter">
                             <div class="col-xs-4 col-sm-2">
-                                <a href="#" class="btn btn-lg btn-block omb_btn-facebook">
+                                <a href="/matcha/web/site/auth?authclient=facebook" class="btn btn-lg btn-block omb_btn-facebook">
                                     <i class="fa fa-facebook visible-xs"></i>
                                     <span class="hidden-xs">Facebook</span>
                                 </a>

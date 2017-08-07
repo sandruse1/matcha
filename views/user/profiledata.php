@@ -10,24 +10,21 @@ use yii\bootstrap\ActiveForm;
 $this->title = 'Profile data';
 
 ?>
+
 <div class="container">
     <div class="row">
         <div class="col-md-10 ">
-            <?php $form = ActiveForm::begin() ?>
+            <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
             <form class="form-horizontal">
                 <fieldset>
                     <legend>User profile form</legend>
-                    <?php if (1): ?>
                         <div class="form-group">
                             <?= $form->field($profile, 'user_name')->textInput([ 'placeholder' => 'name', 'class' => 'form-control']) ?>
                         </div>
-
                         <div class="form-group">
                             <?= $form->field($profile, 'user_secondname')->textInput([ 'placeholder' => 'Second name', 'class' => 'form-control']) ?>
                         </div>
-                    <?php endif; ?>
-
-                    <?php if (1): ?>
+                    <?php if ($profile->facebook): ?>
                         <div class="form-group">
                             <?= $form->field($profile, 'user_login')->textInput([ 'placeholder' => 'Login', 'class' => 'form-control']) ?>
                         </div>
@@ -42,7 +39,7 @@ $this->title = 'Profile data';
                     <?php endif; ?>
 
                     <div class="form-group">
-                        <input id="Upload photo" name="Upload photo" class="input-file" type="file">
+                        <?= $form->field($profile, 'user_avatar')->fileInput() ?>
                     </div>
 
                     <div class="form-group">
@@ -51,20 +48,14 @@ $this->title = 'Profile data';
 
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="Gender">Gender</label>
-                            <input type="radio" name="Gender" id="Gender-0" value="1" checked="checked">
-                            Male
-                            <input type="radio" name="Gender" id="Gender-1" value="2">
-                            Female
+                        <?php $profile->user_sex = 1; ?>
+                        <?= $form->field($profile, 'user_sex')->radioList(['1'=>'Male', '0' =>'Female'])->label(false); ?>
                     </div>
 
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="sexual">Sexual orientation:</label>
-                            <input type="radio" name="sexual" id="radios1-0" value="1" checked="checked">
-                            Bisexual
-                            <input type="radio" name="sexual" id="radios1-0" value="2">
-                            Heterosexual
-                            <input type="radio" name="sexual" id="radios1-0" value="2">
-                            Homosexual
+                        <?php $profile->user_orientation = 1; ?>
+                        <?= $form->field($profile, 'user_orientation')->radioList(['1'=>'Heterosexual', '0' =>'Homosexual', '2' => 'Bisexual'])->label(false); ?>
                     </div>
 
                     <div class="form-group">
@@ -73,10 +64,6 @@ $this->title = 'Profile data';
 
                     <div class="form-group">
                         <?= $form->field($profile, 'user_phone')->textInput([ 'placeholder' => 'Primary Phone number', 'class' => 'form-control']) ?>
-                    </div>
-
-                    <div class="form-group">
-                        <?= $form->field($profile, 'user_phone')->textInput([ 'placeholder' => 'Email Address', 'class' => 'form-control']) ?>
                     </div>
 
                     <div class="form-group">

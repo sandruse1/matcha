@@ -59,27 +59,37 @@ class SiteController extends Controller
     {
         $attributes = $client->getUserAttributes();
         $session = Yii::$app->session;
-        $user = new User();
-        $if_exist = $user->find()->where(['user_email' => $attributes['email']])->one();
-
-        if ($if_exist == NULL){
+        $session->open();
+        $user = User::findOne(['user_email' => $attributes['email']]);
+        if ($user == NULL){
+            $user1 = new User();
             $full_name = explode(" ",$attributes['name']);
-            $user->user_name = $full_name[0];
-            $user->user_secondname = $full_name[1];
-            $user->user_email = $attributes['email'];
-            $user->user_facebook_id = $attributes['id'];
-            $user->save(false);
-            $session['loged_user'] = $attributes;
-
+            $user1->user_name = $full_name[0];
+            $user1->user_secondname = $full_name[1];
+            $user1->user_email = $attributes['email'];
+            $user1->user_facebook_id = $attributes['id'];
+            $user1->save(false);
+            $session['loged_email'] = $attributes['email'];
+            $this->redirect('http://localhost:8080/matcha/web/profiledata');
         }
         else{
-            $session['loged_user'] = $attributes;
+            $session['loged_email'] = $attributes['email'];
+            $session['loged_user'] = $user->user_login;
+            $session->close();
+            if ($user->user_profile_complete == 1){
+                $this->redirect('http://localhost:8080/matcha/web/account');
+            }else{
+                $this->redirect('http://localhost:8080/matcha/web/profiledata');
+            }
         }
-        $this->redirect('http://localhost:8080/matcha/web/profiledata');
     }
 
     public function actionIndex()
     {
+        $session = Yii::$app->session;
+        $session->open();
+        $session->destroy();
+
         $user_table = Yii::$app->db->createCommand('
           CREATE TABLE IF NOT EXISTS `user` (
           `user_id` INT (11) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -120,14 +130,14 @@ class SiteController extends Controller
         $login = new Login();
         if ($login->load(Yii::$app->request->post())){
             $post = Yii::$app->request->post('Login');
-            $user_login = $post['user_login'];
-            $user_form_pass = $post['user_password'];
-            $my_request = User::find()->asArray()->where(['user_login' => $user_login])->all();
+            $my_request = User::find()->asArray()->where(['user_login' => $post['user_login']])->all();
             if ($my_request) {
-                $user_base_pass = $my_request[0]['user_password'];
-                if (Yii::$app->getSecurity()->validatePassword($user_form_pass, $user_base_pass)) {
+                if (Yii::$app->getSecurity()->validatePassword($post['user_password'], $my_request[0]['user_password'])) {
                     $session = Yii::$app->session;
-                    $session['loged_user'] = $my_request[0]['user_name']." ".$my_request[0]['user_secondname'];
+                    $session->open();
+                    $session['loged_user'] = $post['user_login'];
+                    $session['loged_email'] = $my_request[0]['user_email'];
+                    $session->close();
                     $this->redirect('http://localhost:8080/matcha/web/profiledata');
                 } else {
                     Yii::$app->session->setFlash('error', 'The password you entered is invalid. Please try again');
@@ -144,9 +154,9 @@ class SiteController extends Controller
         $user = new User();
         if ($user->load(Yii::$app->request->post())){
             $post = Yii::$app->request->post('User');
-            $post = $post['user_login'];
-            $my_request = User::find()->asArray()->where(['user_login' => $post])->all();
-            if ($my_request == NULL) {
+            $my_request = User::find()->asArray()->where(['user_login' => $post['user_login']])->all();
+            $my_request1 = User::find()->asArray()->where(['user_email' => $post['user_email']])->all();
+            if ($my_request == NULL & $my_request1 == NULL) {
                 if ($user->validate()) {
                     $user->user_password = Yii::$app->getSecurity()->generatePasswordHash($user->user_password);
                     $user->user_rep_password = $user->user_password;
@@ -157,7 +167,11 @@ class SiteController extends Controller
                     Yii::$app->session->setFlash('error',  'Please fill in all the fields correctly');
                 }
             }else {
-                Yii::$app->session->setFlash('error', 'Such login already registered');
+                if ($my_request == NULL) {
+                    Yii::$app->session->setFlash('error', 'Such login already registered');
+                }else{
+                    Yii::$app->session->setFlash('error', 'Such email already registered');
+                }
             }
         }
         return $this->render('signup', compact('user'));

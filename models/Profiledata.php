@@ -14,6 +14,7 @@ use yii\validators\EmailValidator;
 
 class Profiledata extends ActiveRecord
 {
+    public $facebook;
 
     public static function tableName(){
         return 'user';
@@ -28,6 +29,7 @@ class Profiledata extends ActiveRecord
     public function rules()
     {
         return [
+            [['user_avatar'], 'file'],
 //            [ ['user_email', 'user_login', 'user_password'], 'required'],
 //            [ ['user_login', 'user_password'], 'trim'],
 //            [ 'user_password', 'string', 'min' => 8],

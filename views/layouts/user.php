@@ -13,6 +13,7 @@ use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 
 AppAsset::register($this);
+
 ?>
 <?php $this->beginPage() ?>
     <!DOCTYPE html>
@@ -32,30 +33,45 @@ AppAsset::register($this);
     <body>
     <?php $this->beginBody() ?>
     <?php $session = Yii::$app->session; ?>
-    <?php $loged_user = $session['loged_user']['name'] ?>
+    <?php $session->open();?>
+    <?php $loged_user = $session['loged_user'] ?>
+    <?php $user_avatar = $session['user_avatar'] ?>
+
     <div class="wrap">
+<?php if ($this->title != 'Profile data'): ?>
         <?php
         NavBar::begin([
             'brandLabel' => 'Matcha',
-            'brandUrl' => Yii::$app->homeUrl,
+            'brandUrl' => 'http://localhost:8080/matcha/web/account',
             'options' => [
                 'class' => 'navbar-inverse navbar-fixed-top',
             ],
-        ]);
-        echo Nav::widget([
+        ]); ?>
+<?php endif; ?>
+        <?php if ($this->title == 'Profile data'): ?>
+            <?php
+            NavBar::begin([
+                'brandLabel' => 'Matcha',
+                'brandUrl' => 'http://localhost:8080/matcha/web/user/exit',
+                'options' => [
+                    'class' => 'navbar-inverse navbar-fixed-top',
+                ],
+            ]); ?>
+        <?php endif; ?>
+    <?php if ($this->title != 'Profile data'): ?>
+       <?php echo Nav::widget([
             'options' => ['class' => 'navbar-nav navbar-right'],
             'items' => [
-                ['label' => Html::img('people.jpg', ['width' => '20px']) ." ". "$loged_user", 'url' => ['/user/account']],
+                ['label' => Html::img("$user_avatar", ['width' => '20px']) ." ". "$loged_user", 'url' => ['/user/account']],
                 ['label' => 'Profile Settings', 'url' => ['/user/settings']],
                 ['label' => 'Search', 'url' => ['/user/search']],
                 ['label' => 'Message', 'url' => ['/user/message']],
                 ['label' => 'Exit', 'url' => ['/user/exit']],
             ],
             'encodeLabels' => false,
-        ]);
-        NavBar::end();
-        ?>
-
+        ]); ?>
+    <?php endif; ?>
+        <?php NavBar::end(); ?>
         <div class="container">
             <?= Breadcrumbs::widget([
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
@@ -75,4 +91,5 @@ AppAsset::register($this);
     <?php $this->endBody() ?>
     </body>
     </html>
+<?php $session->close();?>
 <?php $this->endPage() ?>
