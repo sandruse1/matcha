@@ -7,8 +7,8 @@ namespace Composer\Autoload;
 class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
 {
     public static $files = array (
-        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         '180092cfc969a12e06f2132a203a3184' => __DIR__ . '/..' . '/codeception/verify/src/Codeception/function.php',
@@ -30,6 +30,11 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
         'p' => 
         array (
             'phpDocumentor\\Reflection\\' => 25,
+        ),
+        'k' => 
+        array (
+            'kotchuprik\\authclient\\' => 22,
+            'kmarenov\\instagram\\' => 19,
         ),
         'c' => 
         array (
@@ -56,6 +61,10 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
         array (
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
+        ),
+        'M' => 
+        array (
+            'MetzWeb\\Instagram\\' => 18,
         ),
         'G' => 
         array (
@@ -120,6 +129,14 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
             1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
             2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
         ),
+        'kotchuprik\\authclient\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kotchuprik/yii2-instagram-authclient',
+        ),
+        'kmarenov\\instagram\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kmarenov/yii2-instagram-widget',
+        ),
         'cebe\\markdown\\' => 
         array (
             0 => __DIR__ . '/..' . '/cebe/markdown',
@@ -175,6 +192,10 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
         'Psr\\Http\\Message\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
+        'MetzWeb\\Instagram\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/cosenary/instagram/src',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (

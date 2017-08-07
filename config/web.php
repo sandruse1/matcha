@@ -71,6 +71,13 @@ $config = [
                     'clientId' => '302902180181988',
                     'clientSecret' => '53debebd7a56476e4b9ed58206f7d425',
                 ],
+                'clients' => [
+                    'instagram' => [
+                        'class' => 'kotchuprik\authclient\Instagram',
+                        'clientId' => '0043d080e927409aa65d80fa2dffdf4e',
+                        'clientSecret' => 'ebfe701eaa2245b0833d33c834d16af7',
+                    ],
+                ],
                 // etc.
             ],
         ]

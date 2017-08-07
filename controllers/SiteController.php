@@ -58,30 +58,32 @@ class SiteController extends Controller
     public function successCallback($client)
     {
         $attributes = $client->getUserAttributes();
-        $session = Yii::$app->session;
-        $session->open();
-        $user = User::findOne(['user_email' => $attributes['email']]);
-        if ($user == NULL){
-            $user1 = new User();
-            $full_name = explode(" ",$attributes['name']);
-            $user1->user_name = $full_name[0];
-            $user1->user_secondname = $full_name[1];
-            $user1->user_email = $attributes['email'];
-            $user1->user_facebook_id = $attributes['id'];
-            $user1->save(false);
-            $session['loged_email'] = $attributes['email'];
-            $this->redirect('http://localhost:8080/matcha/web/profiledata');
-        }
-        else{
-            $session['loged_email'] = $attributes['email'];
-            $session['loged_user'] = $user->user_login;
-            $session->close();
-            if ($user->user_profile_complete == 1){
-                $this->redirect('http://localhost:8080/matcha/web/account');
-            }else{
-                $this->redirect('http://localhost:8080/matcha/web/profiledata');
-            }
-        }
+        var_dump($attributes);
+        die();
+//        $session = Yii::$app->session;
+//        $session->open();
+//        $user = User::findOne(['user_email' => $attributes['email']]);
+//        if ($user == NULL){
+//            $user1 = new User();
+//            $full_name = explode(" ",$attributes['name']);
+//            $user1->user_name = $full_name[0];
+//            $user1->user_secondname = $full_name[1];
+//            $user1->user_email = $attributes['email'];
+//            $user1->user_facebook_id = $attributes['id'];
+//            $user1->save(false);
+//            $session['loged_email'] = $attributes['email'];
+//            $this->redirect('http://localhost:8080/matcha/web/profiledata');
+//        }
+//        else{
+//            $session['loged_email'] = $attributes['email'];
+//            $session['loged_user'] = $user->user_login;
+//            $session->close();
+//            if ($user->user_profile_complete == 1){
+//                $this->redirect('http://localhost:8080/matcha/web/account');
+//            }else{
+//                $this->redirect('http://localhost:8080/matcha/web/profiledata');
+//            }
+//        }
     }
 
     public function actionIndex()

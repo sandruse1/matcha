@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "dabb6ba87c996de1043c3ce02db7d31b",
+    "content-hash": "673a92c3bd4592ef398b0c4baf2791e2",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -268,6 +268,49 @@
             "time": "2017-07-16T21:13:23+00:00"
         },
         {
+            "name": "cosenary/instagram",
+            "version": "v2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cosenary/Instagram-PHP-API.git",
+                "reference": "fbf4c82e2cc7e9a7fd6f9fd7bba1fd2c506102a5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cosenary/Instagram-PHP-API/zipball/fbf4c82e2cc7e9a7fd6f9fd7bba1fd2c506102a5",
+                "reference": "fbf4c82e2cc7e9a7fd6f9fd7bba1fd2c506102a5",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MetzWeb\\Instagram\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD"
+            ],
+            "authors": [
+                {
+                    "name": "Christian Metz",
+                    "email": "christian-metz1@gmx.net",
+                    "homepage": "http://metzweb.net"
+                }
+            ],
+            "description": "An easy-to-use PHP Class for accessing Instagram's API.",
+            "homepage": "https://github.com/cosenary/Instagram-PHP-API",
+            "keywords": [
+                "api",
+                "instagram"
+            ],
+            "time": "2014-11-29T13:10:42+00:00"
+        },
+        {
             "name": "ezyang/htmlpurifier",
             "version": "v4.9.3",
             "source": {
@@ -313,6 +356,92 @@
                 "html"
             ],
             "time": "2017-06-03T02:28:16+00:00"
+        },
+        {
+            "name": "kmarenov/yii2-instagram-widget",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kmarenov/yii2-instagram-widget.git",
+                "reference": "fca020290da63088e807cf67270a7bf572d4a4de"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kmarenov/yii2-instagram-widget/zipball/fca020290da63088e807cf67270a7bf572d4a4de",
+                "reference": "fca020290da63088e807cf67270a7bf572d4a4de",
+                "shasum": ""
+            },
+            "require": {
+                "cosenary/instagram": "*",
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "kmarenov\\instagram\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Kirill Marenov",
+                    "email": "kmarenov@gmail.com"
+                }
+            ],
+            "description": "Allows you to show your Instagram Photos on your Website",
+            "keywords": [
+                "extension",
+                "instagram",
+                "widget",
+                "yii2"
+            ],
+            "time": "2015-12-07T21:13:05+00:00"
+        },
+        {
+            "name": "kotchuprik/yii2-instagram-authclient",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kotchuprik/yii2-instagram-authclient.git",
+                "reference": "63e468b402b0a2b5cf31d03cdf0eaac713a1ed7f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kotchuprik/yii2-instagram-authclient/zipball/63e468b402b0a2b5cf31d03cdf0eaac713a1ed7f",
+                "reference": "63e468b402b0a2b5cf31d03cdf0eaac713a1ed7f",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2-authclient": "~2.0@dev"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "kotchuprik\\authclient\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Constantin Chuprik",
+                    "email": "constantinchuprik@gmail.com"
+                }
+            ],
+            "description": "Instagram extenion for using via yii2-authclient",
+            "homepage": "http://github.com/kotchuprik/yii2-instagram-authclient",
+            "keywords": [
+                "authclient",
+                "instagram",
+                "oauth",
+                "yii2"
+            ],
+            "time": "2015-01-25T19:16:17+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",

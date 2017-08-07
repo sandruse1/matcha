@@ -66,4 +66,13 @@ return array (
       '@yii/authclient' => $vendorDir . '/yiisoft/yii2-authclient',
     ),
   ),
+  'kmarenov/yii2-instagram-widget' => 
+  array (
+    'name' => 'kmarenov/yii2-instagram-widget',
+    'version' => '1.0.1.0',
+    'alias' => 
+    array (
+      '@kmarenov/instagram' => $vendorDir . '/kmarenov/yii2-instagram-widget',
+    ),
+  ),
 );

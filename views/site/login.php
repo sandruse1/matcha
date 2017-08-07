@@ -26,12 +26,14 @@ $this->title = 'Login';
                     </a>
                 </div>
                 <div class="col-xs-4 col-sm-2">
-                    <a href="#" class="btn btn-lg btn-block omb_btn-google">
+                    <a href="" class="btn btn-lg btn-block omb_btn-google">
                         <i class="fa fa-google-plus visible-xs"></i>
                         <span class="hidden-xs">Google+</span>
                     </a>
                 </div>
             </div>
+
+
             <div class="row omb_row-sm-offset-3 omb_loginOr">
                 <div class="col-xs-12 col-sm-6">
                     <hr class="omb_hrOr">
