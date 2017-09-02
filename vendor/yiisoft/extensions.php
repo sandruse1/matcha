@@ -75,4 +75,14 @@ return array (
       '@kmarenov/instagram' => $vendorDir . '/kmarenov/yii2-instagram-widget',
     ),
   ),
+  'dektrium/yii2-user' => 
+  array (
+    'name' => 'dektrium/yii2-user',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@dektrium/user' => $vendorDir . '/dektrium/yii2-user',
+    ),
+    'bootstrap' => 'dektrium\\user\\Bootstrap',
+  ),
 );

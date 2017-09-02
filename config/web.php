@@ -9,6 +9,19 @@ $config = [
     'bootstrap' => ['log'],
     'language' => 'en',
 //    'layout' => 'basic',
+    'modules' => [
+        'redactor' => 'yii\redactor\RedactorModule',
+        'class' => 'yii\redactor\RedactorModule',
+        'uploadDir' => '@webroot/uploads',
+        'uploadUrl' => '/hello/uploads',
+        'user' => [
+            'class' => 'dektrium\user\Module',
+            'enableUnconfirmedLogin' => TRUE,
+            'confirmWithin' => 21600,
+            'cost' => 12,
+            'admins' => ['admin']
+        ],
+    ],
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -71,12 +84,10 @@ $config = [
                     'clientId' => '302902180181988',
                     'clientSecret' => '53debebd7a56476e4b9ed58206f7d425',
                 ],
-                'clients' => [
-                    'instagram' => [
-                        'class' => 'kotchuprik\authclient\Instagram',
-                        'clientId' => '0043d080e927409aa65d80fa2dffdf4e',
-                        'clientSecret' => 'ebfe701eaa2245b0833d33c834d16af7',
-                    ],
+                'google' => [
+                    'class'        => 'dektrium\user\clients\Google',
+                    'clientId'     => '295617776206-eg8ht00ilj1su2231h5jequh35rq9p7t.apps.googleusercontent.com',
+                    'clientSecret' => 'beAXxolPM2_ebrswtUHBjA2-',
                 ],
                 // etc.
             ],

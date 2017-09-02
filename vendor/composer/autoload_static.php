@@ -36,6 +36,10 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
             'kotchuprik\\authclient\\' => 22,
             'kmarenov\\instagram\\' => 19,
         ),
+        'd' => 
+        array (
+            'dektrium\\user\\' => 14,
+        ),
         'c' => 
         array (
             'cebe\\markdown\\' => 14,
@@ -136,6 +140,10 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
         'kmarenov\\instagram\\' => 
         array (
             0 => __DIR__ . '/..' . '/kmarenov/yii2-instagram-widget',
+        ),
+        'dektrium\\user\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/dektrium/yii2-user',
         ),
         'cebe\\markdown\\' => 
         array (

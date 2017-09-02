@@ -59,44 +59,41 @@ class SiteController extends Controller
     public function successCallback($client)
     {
         $attributes = $client->getUserAttributes();
-        var_dump($attributes);
-        die();
-//        $session = Yii::$app->session;
-//        $session->open();
-//        $user = User::findOne(['user_email' => $attributes['email']]);
-//        if ($user == NULL){
-//            $user1 = new User();
-//            $full_name = explode(" ",$attributes['name']);
-//            $user1->user_name = $full_name[0];
-//            $user1->user_secondname = $full_name[1];
-//            $user1->user_email = $attributes['email'];
-//            $user1->user_facebook_id = $attributes['id'];
-//            $user1->save(false);
-//            $session['loged_email'] = $attributes['email'];
-//            $this->redirect('http://localhost:8080/matcha/web/profiledata');
-//        }
-//        else{
-//            $session['loged_email'] = $attributes['email'];
-//            $session['loged_user'] = $user->user_login;
-//            $session->close();
-//            if ($user->user_profile_complete == 1){
-//                $this->redirect('http://localhost:8080/matcha/web/account');
-//            }else{
-//                $this->redirect('http://localhost:8080/matcha/web/profiledata');
-//            }
-//        }
-    }
-    public function actionInsta(){
-
-//        $actual_link = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
-//var_dump(parse_url('https://api.instagram.c om/oauth/authorize/?client_id=0043d080e927409aa65d80fa2dffdf4e&redirect_uri=http://localhost:8080/matcha/web/site/insta&response_type=token&scope=public_content+basic+likes+relationships+comments+follower_list
-//'));
-        echo Url::toRoute(['#' => 'access_token']);
-echo '<br>';
-      var_dump(Yii::$app->getBasePath());
-//        $sa = file_get_contents('https://api.instagram.com/v1/users/self/?access_token=549213355.0043d08.e0aaa661d2554f1da956c9e65117f113');
-//        var_dump($sa);
-        die();
+        $session = Yii::$app->session;
+        $session->open();
+        $user_email = (array_key_exists( "kind" , $attributes)) ? $attributes['emails'][0]['value'] : $attributes['email'] ;
+        $user = User::findOne(['user_email' => $user_email]);
+        if ($user == NULL){
+            $user1 = new User();
+            if (array_key_exists( "kind" , $attributes)){
+                $user1->user_name = $attributes['givenName'];
+                $user1->user_secondname = $attributes['familyName'];
+                $user1->user_email = $user_email;
+                $user1->user_google_id = $attributes['id'];
+                $user1->user_avatar = str_replace('sz=50', 'sz=750', $attributes['inage']['url']);
+            }
+            else {
+                $full_name = explode(" ", $attributes['name']);
+                $user1->user_name = $full_name[0];
+                $user1->user_secondname = $full_name[1];
+                $user1->user_email = $attributes['email'];
+                $user1->user_facebook_id = $attributes['id'];
+                $user1->user_avatar = "//graph.facebook.com/".$attributes['id']."/picture?type=large";
+            }
+            $user1->save(false);
+            $session['loged_email'] = $user_email;
+            $this->redirect('http://localhost:8080/matcha/web/profiledata');
+        }
+        else{
+            $session['loged_email'] = $attributes['email'];
+            $session['loged_user'] = $user->user_login;
+            $session->close();
+            if ($user->user_profile_complete == 1){
+                $this->redirect('http://localhost:8080/matcha/web/account');
+            }else{
+                $this->redirect('http://localhost:8080/matcha/web/profiledata');
+            }
+        }
     }
 
     public function actionIndex()
@@ -121,6 +118,7 @@ echo '<br>';
           `user_phone` VARCHAR (20),
           `user_photo` VARCHAR (1000),
           `user_facebook_id` BIGINT (30) UNSIGNED,
+          `user_google_id` BIGINT (30) UNSIGNED,
           `user_profile_complete` INT (1) DEFAULT \'0\',
           `user_password` VARCHAR (1000) ,
           `user_rep_password` VARCHAR (1000),
