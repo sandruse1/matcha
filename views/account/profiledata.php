@@ -9,9 +9,9 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
 $this->title = 'Profile data';
+ $avatar = ($profile->user_avatar) ? $profile->user_avatar : "https://cdn1.iconfinder.com/data/icons/unique-round-blue/93/user-512.png";
 
 ?>
-
 <div class="container">
     <div class="row">
         <div class="col-md-10 ">
@@ -26,21 +26,24 @@ $this->title = 'Profile data';
                             <?= $form->field($profile, 'user_secondname')->textInput([ 'placeholder' => 'Second name', 'class' => 'form-control']) ?>
                         </div>
                     <?php if ($profile->facebook): ?>
+
                         <div class="form-group">
                             <?= $form->field($profile, 'user_login')->textInput([ 'placeholder' => 'Login', 'class' => 'form-control']) ?>
                         </div>
 
-                        <div class="form-group">
-                            <?= $form->field($profile, 'user_password')->passwordInput([ 'placeholder' => 'Password', 'class' => 'form-control']) ?>
-                        </div>
 
-                        <div class="form-group">
-                            <?= $form->field($profile, 'user_rep_password')->passwordInput([ 'placeholder' => 'Repeat Password', 'class' => 'form-control']) ?>
-                        </div>
                     <?php endif; ?>
 
                     <div class="form-group">
-                        <?= $form->field($profile, 'user_avatar')->fileInput() ?>
+                        <?php if ($profile->facebook): ?>
+                            <label class="control-label">Your cover photo</label>
+                            <img src="<?php echo $avatar ?>" width="250px" alt="" class="img-responsive img-thumbnail ">
+                        <?php endif; ?>
+                        <?php if (!($profile->facebook)): ?>
+                            <?= $form->field($profile, 'user_avatar')->fileInput() ?>
+                            <img src="<?php echo $avatar ?>" width="250px" alt="" class="img-responsive img-thumbnail ">
+                        <?php endif; ?>
+
                     </div>
 
                     <div class="form-group">

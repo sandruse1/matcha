@@ -51,7 +51,7 @@ AppAsset::register($this);
             <?php
             NavBar::begin([
                 'brandLabel' => 'Matcha',
-                'brandUrl' => 'http://localhost:8080/matcha/web/user/exit',
+                'brandUrl' => 'http://localhost:8080/matcha/web/account/exit',
                 'options' => [
                     'class' => 'navbar-inverse navbar-fixed-top',
                 ],
@@ -61,11 +61,11 @@ AppAsset::register($this);
        <?php echo Nav::widget([
             'options' => ['class' => 'navbar-nav navbar-right'],
             'items' => [
-                ['label' => Html::img("$user_avatar", ['width' => '20px']) ." ". "$loged_user", 'url' => ['/user/account']],
-                ['label' => 'Profile Settings', 'url' => ['/user/settings']],
-                ['label' => 'Search', 'url' => ['/user/search']],
-                ['label' => 'Message', 'url' => ['/user/message']],
-                ['label' => 'Exit', 'url' => ['/user/exit']],
+                ['label' => Html::img("$user_avatar", ['width' => '20px']) ." ". "$loged_user", 'url' => ['/account/account']],
+                ['label' => 'Profile Settings', 'url' => ['/account/settings']],
+                ['label' => 'Search', 'url' => ['/account/search']],
+                ['label' => 'Message', 'url' => ['/account/message']],
+                ['label' => 'Exit', 'url' => ['/account/exit']],
             ],
             'encodeLabels' => false,
         ]); ?>

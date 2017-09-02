@@ -63,11 +63,11 @@ $config = [
             'rules' => [
 //                'site/success_login' => 'user/profiledata',
                 '<alias:index|about|contact|signup|login|forgot>' => 'site/<alias>',
-                'search' => 'user/search',
-                'account' => 'user/account',
-                'message' => 'user/message',
-                'profiledata' => 'user/profiledata',
-                'settings' => 'user/settings',
+                'search' => 'account/search',
+                'account' => 'account/account',
+                'message' => 'account/message',
+                'profiledata' => 'account/profiledata',
+                'settings' => 'account/settings',
             ],
         ],
         'facebook' => [
