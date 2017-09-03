@@ -8,6 +8,8 @@
 
 namespace app\controllers;
 
+use app\models\Accountpass;
+use app\models\Accountset;
 use app\models\Profiledata;
 use Yii;
 use yii\helpers\FileHelper;
@@ -21,10 +23,42 @@ class AccountController extends Controller
     public function actionAccount(){
         $session = Yii::$app->session;
         $email = $session['loged_email'];
-        $profile = Profiledata::findOne(['user_email' => $email]);
-        $session['loged_user'] = $profile->user_login;
-        $session['user_avatar'] = $profile->user_avatar;
-        return $this->render('account', compact('profile'));
+        $passwords = Accountpass::findOne(['user_email' => $email]);
+        $settings = Accountset::findOne(['user_email' => $email]);
+        $session['loged_user'] = $settings->user_login;
+        if ($settings->load(Yii::$app->request->post()) || $passwords->load(Yii::$app->request->post())){
+
+            $post = Yii::$app->request->post();
+            var_dump($post);
+            echo "lala";
+            die();
+
+            $post = Yii::$app->request->post('Accountset');
+            if ($settings->validate()) {
+                $settings->user_name = $post['user_name'];
+                $settings->user_secondname = $post['user_secondname'];
+                $settings->user_login = $post['user_login'];
+                $settings->user_interest = $post['user_interest'];
+                $settings->user_phone = $post['user_phone'];
+                $settings->user_about = $post['user_about'];
+                $settings->user_day_of_birth = $post['user_day_of_birth'];
+                $settings->user_email = $post['user_email'];
+                $session['loged_email'] = $post['user_email'];
+                $settings->save(false);
+                return $this->refresh();
+            }
+        }
+        if ($passwords->load(Yii::$app->request->post())){
+            $post = Yii::$app->request->post('Accountpass');
+            var_dump($post);
+            die();
+//            if ($passwords->validate()) {
+//                $passwords->user_password = Yii::$app->getSecurity()->generatePasswordHash($post['user_password']);
+//                $passwords->user_rep_password = $passwords->user_password;
+//                $passwords->save(false);
+//            }
+        }
+        return $this->render('account', compact( 'passwords', 'settings'));
 
     }
 
@@ -48,8 +82,7 @@ class AccountController extends Controller
                     $profile->user_secondname = $post['user_secondname'];
                     if ($profile['user_facebook_id'] != NULL || $profile['user_google_id'] != NULL) {
                         $profile->user_login = $post['user_login'];
-//                        $profile->user_password = Yii::$app->getSecurity()->generatePasswordHash($post['user_password']);
-//                        $profile->user_rep_password = $profile->user_password;
+                        $session['loged_user'] = $post['user_login'];
                     }
                     if (array_key_exists( "Profiledata" , $_FILES) && $_FILES['Profiledata']['name']['user_avatar']) {
                         $profile->user_avatar = UploadedFile::getInstance($profile, 'user_avatar');
@@ -69,7 +102,8 @@ class AccountController extends Controller
                     $profile->user_profile_complete = 1;
                     $profile->save(false);
 
-                    return $this->render('account');
+                    $this->redirect('http://localhost:8080/matcha/web/account');
+
                 } else {
                     Yii::$app->session->setFlash('error', 'Please fill in all the fields correctly');
                 }

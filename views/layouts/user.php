@@ -10,9 +10,9 @@ use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
-use app\assets\AppAsset;
+use app\assets\AccountAsset;
 
-AppAsset::register($this);
+AccountAsset::register($this);
 
 ?>
 <?php $this->beginPage() ?>
@@ -25,6 +25,10 @@ AppAsset::register($this);
         <?= Html::csrfMetaTags() ?>
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Cinzel" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet">
+        <link href=" https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.1.1/min/dropzone.min.css" rel="stylesheet">
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha256-3dkvEK0WLHRJ7/Csr0BZjAWxERc5WH7bdeUya2aXxdU= sha512-+L4yy6FRcDGbXJ9mPG8MT/3UCDzwR9gPeyFNMCtInsol++5m3bk2bXWKdZjvybmohrAsn3Ua5x8gfLnbE1YkOg==" crossorigin="anonymous">
         <!-- Bootstrap Core CSS -->
         <!--     <link href="css/bootstrap.min.css" rel="stylesheet"> -->
@@ -32,6 +36,7 @@ AppAsset::register($this);
     </head>
     <body>
     <?php $this->beginBody() ?>
+    <div class="wrap">
     <?php $session = Yii::$app->session; ?>
     <?php $session->open();?>
     <?php $loged_user = $session['loged_user'] ?>
@@ -62,7 +67,6 @@ AppAsset::register($this);
             'options' => ['class' => 'navbar-nav navbar-right'],
             'items' => [
                 ['label' => Html::img("$user_avatar", ['width' => '20px']) ." ". "$loged_user", 'url' => ['/account/account']],
-                ['label' => 'Profile Settings', 'url' => ['/account/settings']],
                 ['label' => 'Search', 'url' => ['/account/search']],
                 ['label' => 'Message', 'url' => ['/account/message']],
                 ['label' => 'Exit', 'url' => ['/account/exit']],
@@ -78,17 +82,16 @@ AppAsset::register($this);
             <?= $content ?>
         </div>
     </div>
-
+    </div>
     <footer class="footer">
         <div class="container">
             <p class="pull-left">&copy; Matcha <?= date('Y') ?></p>
-
             <p class="pull-right"><?= Yii::powered() ?></p>
         </div>
     </footer>
-
     <?php $this->endBody() ?>
     </body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.1.1/min/dropzone.min.js"></script>
     </html>
 <?php $session->close();?>
 <?php $this->endPage() ?>

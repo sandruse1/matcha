@@ -122,6 +122,7 @@ class SiteController extends Controller
           `user_profile_complete` INT (1) DEFAULT \'0\',
           `user_password` VARCHAR (1000) ,
           `user_rep_password` VARCHAR (1000),
+          `user_geolocation` VARCHAR (500) DEFAULT \'хуй зна де\',
           PRIMARY KEY (`user_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8
         ');
         $user_table->query();

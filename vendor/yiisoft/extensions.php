@@ -75,10 +75,19 @@ return array (
       '@kmarenov/instagram' => $vendorDir . '/kmarenov/yii2-instagram-widget',
     ),
   ),
+  'yiisoft/yii2-jui' => 
+  array (
+    'name' => 'yiisoft/yii2-jui',
+    'version' => '2.0.0.0-beta',
+    'alias' => 
+    array (
+      '@yii/jui' => $vendorDir . '/yiisoft/yii2-jui',
+    ),
+  ),
   'dektrium/yii2-user' => 
   array (
     'name' => 'dektrium/yii2-user',
-    'version' => '9999999-dev',
+    'version' => '0.9.12.0',
     'alias' => 
     array (
       '@dektrium/user' => $vendorDir . '/dektrium/yii2-user',

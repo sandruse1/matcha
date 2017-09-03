@@ -47,7 +47,7 @@ $this->title = 'Profile data';
                     </div>
 
                     <div class="form-group">
-                        <?= $form->field($profile, 'user_day_of_birth')->textInput([ 'placeholder' => '11.10.1994 (d.m.y)', 'class' => 'form-control']) ?>
+                        <?= $form->field($profile,'user_day_of_birth')->widget(yii\jui\DatePicker::className(),['clientOptions' => ['dateFormat' => 'd.m.yy', 'yearRange' => '1956:2016','changeMonth' => 'true', 'changeYear' => 'true',] ,])->textInput(['class'=>'form-control']) ?>
                     </div>
 
                     <div class="form-group">

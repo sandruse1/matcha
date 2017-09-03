@@ -34,8 +34,8 @@ class Profiledata extends ActiveRecord
             'user_avatar' => 'Your cover photo',
             'user_day_of_birth' => 'Your date of birth',
             'user_phone' => 'Your phone number',
-//            'user_password' => 'Your login password',
-//            'user_rep_password' => 'Repeat your login password',
+
+
         ];
     }
 
