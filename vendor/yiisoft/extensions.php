@@ -94,4 +94,13 @@ return array (
     ),
     'bootstrap' => 'dektrium\\user\\Bootstrap',
   ),
+  'lysenkobv/yii2-geoip' => 
+  array (
+    'name' => 'lysenkobv/yii2-geoip',
+    'version' => '1.0.4.0',
+    'alias' => 
+    array (
+      '@lysenkobv/GeoIP' => $vendorDir . '/lysenkobv/yii2-geoip/src',
+    ),
+  ),
 );

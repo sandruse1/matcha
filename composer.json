@@ -23,7 +23,8 @@
         "kotchuprik/yii2-instagram-authclient": "*",
         "kmarenov/yii2-instagram-widget": "*",
         "dektrium/yii2-user": "0.9.*@dev",
-        "yiisoft/yii2-jui": "*"
+        "yiisoft/yii2-jui": "*",
+        "lysenkobv/yii2-geoip": "~1.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

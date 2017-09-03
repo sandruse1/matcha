@@ -24,39 +24,46 @@ class AccountController extends Controller
         $session = Yii::$app->session;
         $email = $session['loged_email'];
         $passwords = Accountpass::findOne(['user_email' => $email]);
+        $passwords->user_password = '';
+        $passwords->user_rep_password = '';
         $settings = Accountset::findOne(['user_email' => $email]);
         $session['loged_user'] = $settings->user_login;
-        if ($settings->load(Yii::$app->request->post()) || $passwords->load(Yii::$app->request->post())){
+        if ($settings->load(Yii::$app->request->post()) || $passwords->load(Yii::$app->request->post())) {
 
-            $post = Yii::$app->request->post();
-            var_dump($post);
-            echo "lala";
-            die();
 
-            $post = Yii::$app->request->post('Accountset');
-            if ($settings->validate()) {
-                $settings->user_name = $post['user_name'];
-                $settings->user_secondname = $post['user_secondname'];
-                $settings->user_login = $post['user_login'];
-                $settings->user_interest = $post['user_interest'];
-                $settings->user_phone = $post['user_phone'];
-                $settings->user_about = $post['user_about'];
-                $settings->user_day_of_birth = $post['user_day_of_birth'];
-                $settings->user_email = $post['user_email'];
-                $session['loged_email'] = $post['user_email'];
-                $settings->save(false);
-                return $this->refresh();
+            $reqest = Yii::$app->request->post();
+            if (array_key_exists('Accountset', $reqest)) {
+                if ($settings->validate()) {
+                    $post = Yii::$app->request->post('Accountset');
+                    $settings->user_name = $post['user_name'];
+                    $settings->user_secondname = $post['user_secondname'];
+                    $settings->user_login = $post['user_login'];
+                    $settings->user_interest = $post['user_interest'];
+                    $settings->user_phone = $post['user_phone'];
+                    $settings->user_about = $post['user_about'];
+                    $settings->user_day_of_birth = $post['user_day_of_birth'];
+                    $settings->user_email = $post['user_email'];
+                    $session['loged_email'] = $post['user_email'];
+                    $settings->save(false);
+                    Yii::$app->session->setFlash('success', 'You have successfully update your profile');
+                    return $this->refresh();
+                }
+            } else {
+                $ip = Yii::$app->geoip->ip();
+                $ip = Yii::$app->geoip->ip("208.113.83.165");
+                var_dump(Yii::$app->request->u);
+                die();
+//                $post = Yii::$app->request->post('Accountpass');
+//                if ($passwords->validate()) {
+//                    $passwords->user_password = Yii::$app->getSecurity()->generatePasswordHash($post['user_password']);
+//                    $passwords->user_rep_password = $passwords->user_password;
+//                    $passwords->save(false);
+//                    Yii::$app->session->setFlash('success', 'You have successfully changed your password');
+//                    return $this->refresh();
+//                }
             }
-        }
-        if ($passwords->load(Yii::$app->request->post())){
-            $post = Yii::$app->request->post('Accountpass');
-            var_dump($post);
-            die();
-//            if ($passwords->validate()) {
-//                $passwords->user_password = Yii::$app->getSecurity()->generatePasswordHash($post['user_password']);
-//                $passwords->user_rep_password = $passwords->user_password;
-//                $passwords->save(false);
-//            }
+
+
         }
         return $this->render('account', compact( 'passwords', 'settings'));
 

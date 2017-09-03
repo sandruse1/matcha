@@ -40,7 +40,12 @@ $this->title = $session['loged_user'];
                             <li><a data-toggle="tab" href="#menu3"><i class="fa fa-picture-o fa-lg"></i></a></li>
                             <li><a data-toggle="tab" href="#menu4"><i class="fa fa-map-marker fa-lg"></i></a></li>
                         </ul>
-
+                        <?php if (Yii::$app->session->hasFlash('success')): ?>
+                            <div class="alert alert-success alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <?php echo Yii::$app->session->getFlash('success'); ?>
+                            </div>
+                        <?php endif; ?>
 
                         <div class="tab-content">
                             <div id="home" class="tab-pane fade in active">

@@ -31,6 +31,8 @@ $config = [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+        'geoip' => ['class' => 'lysenkobv\GeoIP\GeoIP'
+        ],
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,

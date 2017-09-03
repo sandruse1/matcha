@@ -32,6 +32,10 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
         array (
             'phpDocumentor\\Reflection\\' => 25,
         ),
+        'l' => 
+        array (
+            'lysenkobv\\GeoIP\\' => 16,
+        ),
         'k' => 
         array (
             'kotchuprik\\authclient\\' => 22,
@@ -70,6 +74,7 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
         'M' => 
         array (
             'MetzWeb\\Instagram\\' => 18,
+            'MaxMind\\Db\\' => 11,
         ),
         'G' => 
         array (
@@ -137,6 +142,10 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
             1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
             2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+        ),
+        'lysenkobv\\GeoIP\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/lysenkobv/yii2-geoip/src',
         ),
         'kotchuprik\\authclient\\' => 
         array (
@@ -209,6 +218,10 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
         'MetzWeb\\Instagram\\' => 
         array (
             0 => __DIR__ . '/..' . '/cosenary/instagram/src',
+        ),
+        'MaxMind\\Db\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/maxmind-db/reader/src/MaxMind/Db',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (
