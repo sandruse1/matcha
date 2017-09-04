@@ -24,7 +24,9 @@
         "kmarenov/yii2-instagram-widget": "*",
         "dektrium/yii2-user": "0.9.*@dev",
         "yiisoft/yii2-jui": "*",
-        "lysenkobv/yii2-geoip": "~1.0"
+        "lysenkobv/yii2-geoip": "~1.0",
+        "2amigos/yii2-google-maps-library": "*",
+        "kossmoss/yii2-google-maps-api": "^0.2"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

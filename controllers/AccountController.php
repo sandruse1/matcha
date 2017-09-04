@@ -11,6 +11,7 @@ namespace app\controllers;
 use app\models\Accountpass;
 use app\models\Accountset;
 use app\models\Profiledata;
+use kossmoss\GoogleMaps\GoogleMaps;
 use Yii;
 use yii\helpers\FileHelper;
 use yii\web\Controller;
@@ -21,13 +22,28 @@ class AccountController extends Controller
     public $layout = 'user';
 
     public function actionAccount(){
+        $pictures = array();
+
+
+
+
         $session = Yii::$app->session;
         $email = $session['loged_email'];
         $passwords = Accountpass::findOne(['user_email' => $email]);
         $passwords->user_password = '';
         $passwords->user_rep_password = '';
         $settings = Accountset::findOne(['user_email' => $email]);
+        $session['user_avatar'] = $settings->user_avatar;
         $session['loged_user'] = $settings->user_login;
+
+        if ($dir = opendir("./photo/".$settings->user_login))  {
+            while (false !== ($file = readdir($dir))) {
+                if ($file == "." || $file == ".." || (is_dir("./photo/".$settings->user_login."/".$file))) continue;
+                $pictures[] = $file;
+            }
+            closedir($dir);
+        }
+
         if ($settings->load(Yii::$app->request->post()) || $passwords->load(Yii::$app->request->post())) {
 
 
@@ -49,23 +65,19 @@ class AccountController extends Controller
                     return $this->refresh();
                 }
             } else {
-                $ip = Yii::$app->geoip->ip();
-                $ip = Yii::$app->geoip->ip("208.113.83.165");
-                var_dump(Yii::$app->request->u);
-                die();
-//                $post = Yii::$app->request->post('Accountpass');
-//                if ($passwords->validate()) {
-//                    $passwords->user_password = Yii::$app->getSecurity()->generatePasswordHash($post['user_password']);
-//                    $passwords->user_rep_password = $passwords->user_password;
-//                    $passwords->save(false);
-//                    Yii::$app->session->setFlash('success', 'You have successfully changed your password');
-//                    return $this->refresh();
-//                }
+                $post = Yii::$app->request->post('Accountpass');
+                if ($passwords->validate()) {
+                    $passwords->user_password = Yii::$app->getSecurity()->generatePasswordHash($post['user_password']);
+                    $passwords->user_rep_password = $passwords->user_password;
+                    $passwords->save(false);
+                    Yii::$app->session->setFlash('success', 'You have successfully changed your password');
+                    return $this->refresh();
+                }
             }
 
 
         }
-        return $this->render('account', compact( 'passwords', 'settings'));
+        return $this->render('account', compact( 'passwords', 'settings', 'pictures'));
 
     }
 
@@ -78,6 +90,7 @@ class AccountController extends Controller
         $session = Yii::$app->session;
         $session->open();
         FileHelper::createDirectory('./avatars');
+        FileHelper::createDirectory('./photo');
         if ($session['loged_email']) {
             $email = $session['loged_email'];
             $profile = Profiledata::findOne(['user_email' => $email]);
@@ -108,7 +121,7 @@ class AccountController extends Controller
                     $profile->user_about = $post['user_about'];
                     $profile->user_profile_complete = 1;
                     $profile->save(false);
-
+                    FileHelper::createDirectory("./photo/".$profile->user_login);
                     $this->redirect('http://localhost:8080/matcha/web/account');
 
                 } else {
@@ -135,5 +148,37 @@ class AccountController extends Controller
 
     public function actionExit(){
         $this->redirect('http://localhost:8080/matcha/web/index');
+    }
+    public function actionLocationupdate(){
+
+        $session = Yii::$app->session;
+        $email = $session['loged_email'];
+        $user = Profiledata::findOne(['user_email' => $email]);
+
+        $reqest = Yii::$app->request->post();
+
+        $user->user_latitude = $reqest['latitude']  ;
+        $user->user_longitude = $reqest['longitude'];
+        $user->user_country = $reqest['country'];
+        $user->user_city = $reqest['city'] ;
+
+        $user->save(false);
+        Yii::$app->session->setFlash('success', 'You have successfully update your location');
+
+
+    }
+    public function actionLocationset(){
+
+        $session = Yii::$app->session;
+        $email = $session['loged_email'];
+        $user = Profiledata::findOne(['user_email' => $email]);
+        $reqest = Yii::$app->request->post();
+        $user->user_latitude = $reqest['latitude']  ;
+        $user->user_longitude = $reqest['longitude'];
+        $user->user_country = $reqest['country'];
+        $user->user_city = $reqest['city'] ;
+
+        $user->save(false);
+
     }
 }

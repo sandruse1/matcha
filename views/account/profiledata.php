@@ -9,9 +9,10 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
 $this->title = 'Profile data';
- $avatar = ($profile->user_avatar) ? $profile->user_avatar : "https://cdn1.iconfinder.com/data/icons/unique-round-blue/93/user-512.png";
+$avatar = ($profile->user_avatar) ? $profile->user_avatar : "https://cdn1.iconfinder.com/data/icons/unique-round-blue/93/user-512.png";
 
 ?>
+
 <div class="container">
     <div class="row">
         <div class="col-md-10 ">
@@ -85,3 +86,39 @@ $this->title = 'Profile data';
 
     </div>
 </div>
+
+<script>
+    var latitude = '',
+        longitude = '',
+        country = '',
+        city = '';
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            latitude = position.coords.latitude;
+            longitude = position.coords.longitude;
+        });
+    }
+    if (latitude && longitude) {
+        $.getJSON('https://geoip-db.com/json/geoip.php?jsonp=?').done(function (location) {
+            country = location.country_name;
+            city = location.city;
+        });
+    } else {
+        $.getJSON('https://geoip-db.com/json/geoip.php?jsonp=?').done(function (location) {
+            latitude = location.latitude;
+            longitude = location.longitude;
+            country = location.country_name;
+            city = location.city;
+            console.log(location);
+        });
+    }
+
+    setTimeout(function(){
+        $.ajax({
+            url: '<?php echo Yii::$app->request->baseUrl . '/account/locationset' ?>',
+            type: 'post',
+            data: {latitude: latitude, longitude: longitude, country: country, city: city},
+        });
+    }, 2000);
+</script>

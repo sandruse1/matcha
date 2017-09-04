@@ -122,7 +122,10 @@ class SiteController extends Controller
           `user_profile_complete` INT (1) DEFAULT \'0\',
           `user_password` VARCHAR (1000) ,
           `user_rep_password` VARCHAR (1000),
-          `user_geolocation` VARCHAR (500) DEFAULT \'хуй зна де\',
+          `user_city` VARCHAR (100) DEFAULT \'хуй зна де\',
+          `user_country` VARCHAR (100) DEFAULT \'хуй зна де\',
+          `user_longitude` VARCHAR (100) ,
+          `user_latitude` VARCHAR (100) ,
           PRIMARY KEY (`user_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8
         ');
         $user_table->query();
@@ -152,6 +155,8 @@ class SiteController extends Controller
                     $session['loged_user'] = $post['user_login'];
                     $session['loged_email'] = $my_request[0]['user_email'];
                     $session->close();
+                    $location = substr(file_get_contents('https://geoip-db.com/json/geoip.php?jsonp='), 1 ,strlen(file_get_contents('https://geoip-db.com/json/geoip.php?jsonp=')) - 2 );
+
                     $this->redirect('http://localhost:8080/matcha/web/profiledata');
                 } else {
                     Yii::$app->session->setFlash('error', 'The password you entered is invalid. Please try again');

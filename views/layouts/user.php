@@ -25,6 +25,7 @@ AccountAsset::register($this);
         <?= Html::csrfMetaTags() ?>
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFs--m_djni4FLePuRqzXpd314G7CG_wU"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Cinzel" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet">
@@ -91,7 +92,9 @@ AccountAsset::register($this);
     </footer>
     <?php $this->endBody() ?>
     </body>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.1.1/min/dropzone.min.js"></script>
+
     </html>
 <?php $session->close();?>
 <?php $this->endPage() ?>

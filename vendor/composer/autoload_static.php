@@ -9,9 +9,11 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
     public static $files = array (
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
-        '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
+        '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
+        'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         '180092cfc969a12e06f2132a203a3184' => __DIR__ . '/..' . '/codeception/verify/src/Codeception/function.php',
+        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -43,6 +45,7 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
         ),
         'd' => 
         array (
+            'dosamigos\\google\\maps\\' => 22,
             'dektrium\\user\\' => 14,
         ),
         'c' => 
@@ -79,6 +82,8 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
         'G' => 
         array (
             'GuzzleHttp\\Psr7\\' => 16,
+            'GuzzleHttp\\Promise\\' => 19,
+            'GuzzleHttp\\' => 11,
         ),
         'F' => 
         array (
@@ -155,6 +160,10 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
         array (
             0 => __DIR__ . '/..' . '/kmarenov/yii2-instagram-widget',
         ),
+        'dosamigos\\google\\maps\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/2amigos/yii2-google-maps-library',
+        ),
         'dektrium\\user\\' => 
         array (
             0 => __DIR__ . '/..' . '/dektrium/yii2-user',
@@ -226,6 +235,14 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
         'GuzzleHttp\\Psr7\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
+        ),
+        'GuzzleHttp\\Promise\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/promises/src',
+        ),
+        'GuzzleHttp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
         ),
         'Faker\\' => 
         array (
@@ -819,6 +836,13 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
         'TheSeer\\Tokenizer\\TokenCollectionException' => __DIR__ . '/..' . '/theseer/tokenizer/src/TokenCollectionException.php',
         'TheSeer\\Tokenizer\\Tokenizer' => __DIR__ . '/..' . '/theseer/tokenizer/src/Tokenizer.php',
         'TheSeer\\Tokenizer\\XMLSerializer' => __DIR__ . '/..' . '/theseer/tokenizer/src/XMLSerializer.php',
+        'kossmoss\\GoogleMaps\\GoogleMapAPI' => __DIR__ . '/..' . '/kossmoss/yii2-google-maps-api/src/GoogleMapAPI.php',
+        'kossmoss\\GoogleMaps\\GoogleMaps' => __DIR__ . '/..' . '/kossmoss/yii2-google-maps-api/GoogleMaps.php',
+        'kossmoss\\GoogleMaps\\GoogleMapsAsset' => __DIR__ . '/..' . '/kossmoss/yii2-google-maps-api/src/GoogleMapsAsset.php',
+        'kossmoss\\GoogleMaps\\JSMin' => __DIR__ . '/..' . '/kossmoss/yii2-google-maps-api/src/JSMin.php',
+        'kossmoss\\GoogleMaps\\JSMin_UnterminatedCommentException' => __DIR__ . '/..' . '/kossmoss/yii2-google-maps-api/src/JSMin.php',
+        'kossmoss\\GoogleMaps\\JSMin_UnterminatedRegExpException' => __DIR__ . '/..' . '/kossmoss/yii2-google-maps-api/src/JSMin.php',
+        'kossmoss\\GoogleMaps\\JSMin_UnterminatedStringException' => __DIR__ . '/..' . '/kossmoss/yii2-google-maps-api/src/JSMin.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

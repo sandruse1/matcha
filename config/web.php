@@ -93,7 +93,15 @@ $config = [
                 ],
                 // etc.
             ],
-        ]
+        ],
+        'assetManager' => [
+            'bundles' => [
+                'kossmoss\GoogleMaps\GoogleMapsAsset' => [
+                    'apiKey' => 'AIzaSyAEMGeAu4-DWCQShVdZM_qLgCPe9rvrd20',   // get at https://developers.google.com/maps/documentation/javascript/get-api-key
+                    'language' => 'ru', // use language code supported by Google Maps API  (default: en)
+                ],
+            ],
+        ],
 //        'assetManager' => [
 //            'basePath' => '@webroot/assets',
 //            'baseUrl' => '@web/assets'

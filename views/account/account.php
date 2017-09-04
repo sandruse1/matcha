@@ -11,11 +11,68 @@ use yii\widgets\MaskedInput;
 use yii\bootstrap\ActiveForm;
 use yii\authclient\widgets\AuthChoice;
 use yii\jui\DatePicker;
+use yii\widgets\LinkPager;
+
 
 $session = Yii::$app->session;
 $session->open();
 $this->title = $session['loged_user'];
+
 ?>
+
+<script>
+    var latitude = '',
+        longitude = '',
+        country = '',
+        city = '';
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            latitude = position.coords.latitude;
+            longitude = position.coords.longitude;
+        });
+    }
+    if (latitude && longitude) {
+        $.getJSON('https://geoip-db.com/json/geoip.php?jsonp=?').done(function(location) {
+            country = location.country_name;
+            city = location.city;
+        });
+    } else {
+        $.getJSON('https://geoip-db.com/json/geoip.php?jsonp=?').done(function(location) {
+            latitude = location.latitude;
+            longitude = location.longitude;
+            country = location.country_name;
+            city = location.city;
+        });
+    }
+<?php if($settings->user_city == NULL) :?>
+    setTimeout(function(){
+        $.ajax({
+            url: '<?php echo Yii::$app->request->baseUrl . '/account/locationset' ?>',
+            type: 'post',
+            data: {latitude: latitude, longitude: longitude, country: country, city: city},
+            success: function (data) {
+                location.href = 'http://localhost:8080/matcha/web/account';
+            }
+        });
+    }, 2000);
+    <?php endif; ?>
+</script>
+
+<script>
+    function myFunction()
+    {
+        $.ajax({
+            url: '<?php echo Yii::$app->request->baseUrl. '/account/locationupdate' ?>',
+            type: 'post',
+            data: {latitude: latitude , longitude:longitude, country: country, city : city},
+            success: function (data) {
+                location.href = 'http://localhost:8080/matcha/web/account';
+            }
+        });
+    }
+</script>
+<?php var_dump($pictures)?>
 <div class="site-login">
 
 <div class="col-md-6 col-md-offset-3">
@@ -31,6 +88,8 @@ $this->title = $session['loged_user'];
                     </div>
                     <div class="text-information">
                         <h2 class="main-name"><?php echo $settings->user_name." ".$settings->user_secondname ?></h2>
+                        <h5 class="email-info"><?php echo $settings->user_country.", ".$settings->user_city?></h5>
+
                     </div>
                     <div class="tab-section">
                         <ul class="nav nav-tabs">
@@ -181,12 +240,13 @@ $this->title = $session['loged_user'];
 
                             <div id="menu4" class="tab-pane fade">
                                 <div class="form-group text-center">
-                                    <h4> <i class="fa fa-map-marker " aria-hidden="true"></i> <?php echo $settings->user_geolocation?></h4>
+                                    <h4> <i class="fa fa-map-marker " aria-hidden="true"></i> <?php echo $settings->user_country.", ".$settings->user_city?></h4>
                                     <br>
                                     <div class="text-right">
-                                        <a class="btn btn-primary btn-submit">Change location</a>
+                                        <a class="btn btn-primary btn-submit" onclick="myFunction()">Update location</a>
                                     </div>
                                 </div>
+                                <div id="map" style="width: 100%; height: 300px;"></div>
                             </div>
                         </div>
                     </div>
@@ -197,3 +257,20 @@ $this->title = $session['loged_user'];
 </div>
 </div>
 
+
+<script>
+    var coords = {
+        lat: parseFloat(<?php echo $settings->user_latitude?>),
+        lng: parseFloat(<?php echo $settings->user_longitude?>)
+    }
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 15,
+        center: coords
+    });
+
+    var marker = new google.maps.Marker({
+        position: coords,
+        map: map
+
+    });
+</script>

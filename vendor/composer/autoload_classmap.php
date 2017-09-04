@@ -537,4 +537,11 @@ return array(
     'TheSeer\\Tokenizer\\TokenCollectionException' => $vendorDir . '/theseer/tokenizer/src/TokenCollectionException.php',
     'TheSeer\\Tokenizer\\Tokenizer' => $vendorDir . '/theseer/tokenizer/src/Tokenizer.php',
     'TheSeer\\Tokenizer\\XMLSerializer' => $vendorDir . '/theseer/tokenizer/src/XMLSerializer.php',
+    'kossmoss\\GoogleMaps\\GoogleMapAPI' => $vendorDir . '/kossmoss/yii2-google-maps-api/src/GoogleMapAPI.php',
+    'kossmoss\\GoogleMaps\\GoogleMaps' => $vendorDir . '/kossmoss/yii2-google-maps-api/GoogleMaps.php',
+    'kossmoss\\GoogleMaps\\GoogleMapsAsset' => $vendorDir . '/kossmoss/yii2-google-maps-api/src/GoogleMapsAsset.php',
+    'kossmoss\\GoogleMaps\\JSMin' => $vendorDir . '/kossmoss/yii2-google-maps-api/src/JSMin.php',
+    'kossmoss\\GoogleMaps\\JSMin_UnterminatedCommentException' => $vendorDir . '/kossmoss/yii2-google-maps-api/src/JSMin.php',
+    'kossmoss\\GoogleMaps\\JSMin_UnterminatedRegExpException' => $vendorDir . '/kossmoss/yii2-google-maps-api/src/JSMin.php',
+    'kossmoss\\GoogleMaps\\JSMin_UnterminatedStringException' => $vendorDir . '/kossmoss/yii2-google-maps-api/src/JSMin.php',
 );
