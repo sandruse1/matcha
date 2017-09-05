@@ -13,13 +13,11 @@ use yii\authclient\widgets\AuthChoice;
 use yii\jui\DatePicker;
 use yii\widgets\LinkPager;
 
-
 $session = Yii::$app->session;
 $session->open();
 $this->title = $session['loged_user'];
 
 ?>
-
 <script>
     var latitude = '',
         longitude = '',
@@ -58,7 +56,6 @@ $this->title = $session['loged_user'];
     }, 2000);
     <?php endif; ?>
 </script>
-
 <script>
     function myFunction()
     {
@@ -71,8 +68,34 @@ $this->title = $session['loged_user'];
             }
         });
     }
+
+    function deletePhoto(src)
+    {
+        $.ajax({
+            url: '<?php echo Yii::$app->request->baseUrl. '/account/deletephoto' ?>',
+            type: 'post',
+            data: {photo: src},
+            success: function (data) {
+                location.href = 'http://localhost:8080/matcha/web/account';
+
+            }
+        });
+    }
+
+    function toAvatar(srctoavatar, srcfromavatar, login)
+    {
+        $.ajax({
+            url: '<?php echo Yii::$app->request->baseUrl. '/account/setasavatar' ?>',
+            type: 'post',
+            data: {srctoavatar: srctoavatar, srcfromavatar: srcfromavatar, login: login},
+            success: function (data) {
+                location.href = 'http://localhost:8080/matcha/web/account';
+
+            }
+        });
+    }
 </script>
-<?php var_dump($pictures)?>
+
 <div class="site-login">
 
 <div class="col-md-6 col-md-offset-3">
@@ -151,8 +174,6 @@ $this->title = $session['loged_user'];
                                     <?php $form = ActiveForm::end() ?>
                                 </div>
                             </div>
-
-
                             <div id="menu1" class="tab-pane fade">
 
                                 <div class="friend-list">
@@ -191,7 +212,6 @@ $this->title = $session['loged_user'];
                                     </div>
                                 </div>
                             </div>
-
                             <div id="menu2" class="tab-pane fade">
                                 <?php $form1 = ActiveForm::begin() ?>
 
@@ -207,37 +227,138 @@ $this->title = $session['loged_user'];
                                 <?php $form1 = ActiveForm::end() ?>
                             </div>
 
-
-
                             <div id="menu3" class="tab-pane fade">
                                 <div class="row">
-                                    <div class="col-md-4 col-sm-4 col-xs-6 shine_me">
-                                        <img src="http://lorempixel.com/output/food-q-c-320-240-2.jpg" class="img-responsive"/>
-                                        <i class="shine_effect"></i>
+
+                                    <div class="form-group">
+
+                                        <?php if (array_key_exists(0, $pictures) == false): ?>
+                                            <img src="http://www.inserco.org/en/sites/all/modules/media_gallery/images/empty_gallery.png" class="img-responsive"/>
+                                        <?php else: ?>
+                                            <img src="<?php echo "./photo/".$settings->user_login."/".$pictures[0]?>" class="img-responsive"/>
+                                        <?php endif; ?>
+
+                                        <div class="form-group">
+                                            <div class="panel-body">
+
+                                                <?php if (array_key_exists(0, $pictures) == false): ?>
+                                                    <?php $form3 = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+                                                    <?= $form3->field($photo, 'imageUpload')->fileInput() ?>
+                                                    <?= Html::submitButton('Add', ['class' => 'btn btn-md btn-hover btn-success', 'id' => 'profileSubmit']) ?>
+                                                    <?php $form3 = ActiveForm::end() ?>
+                                                <?php else: ?>
+
+                                                    <button onclick="toAvatar('<?php echo "./photo/".$settings->user_login."/".$pictures[0]?>' , '<?php echo $settings->user_avatar ?>','<?php echo $settings->user_login?>' )" class="btn btn-md btn-hover btn-info">Avatar</button>
+                                                    <button onclick="deletePhoto('<?php echo "./photo/".$settings->user_login."/".$pictures[0]?>')" class="btn btn-md btn-hover btn-danger">Delete</button>
+
+                                                <?php endif; ?>
+
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-4 col-sm-4 col-xs-6 shine_me">
-                                        <img src="http://lorempixel.com/output/food-q-c-320-240-4.jpg" class="img-responsive"/>
-                                        <i class="shine_effect"></i>
+
+                                    <div class="form-group">
+                                        <?php if (array_key_exists(1, $pictures) == false): ?>
+                                            <img src="http://www.inserco.org/en/sites/all/modules/media_gallery/images/empty_gallery.png" class="img-responsive"/>
+                                        <?php else: ?>
+                                            <img src="<?php echo "./photo/".$settings->user_login."/".$pictures[1]?>" class="img-responsive"/>
+                                        <?php endif; ?>
+                                        <div class="form-group">
+                                            <div class="panel-body">
+
+                                                <?php if (array_key_exists(1, $pictures) == false): ?>
+                                                    <?php $form3 = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+                                                    <?= $form3->field($photo, 'imageUpload')->fileInput() ?>
+                                                    <?= Html::submitButton('Add', ['class' => 'btn btn-md btn-hover btn-success', 'id' => 'profileSubmit']) ?>
+                                                    <?php $form3 = ActiveForm::end() ?>
+                                                <?php else: ?>
+
+                                                    <a href="#" class="btn btn-md btn-hover btn-info">Avatar</a>
+                                                    <a href="#" class="btn btn-md btn-hover btn-danger">Delete</a>
+
+                                                <?php endif; ?>
+
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-4 col-sm-4 col-xs-6 shine_me">
-                                        <img src="http://lorempixel.com/output/food-q-c-320-240-1.jpg" class="img-responsive"/>
-                                        <i class="shine_effect"></i>
+
+                                    <div class="form-group">
+                                        <?php if (array_key_exists(2, $pictures) == false): ?>
+                                            <img src="http://www.inserco.org/en/sites/all/modules/media_gallery/images/empty_gallery.png" class="img-responsive"/>
+                                        <?php else: ?>
+                                            <img src="<?php echo "./photo/".$settings->user_login."/".$pictures[2]?>" class="img-responsive"/>
+                                        <?php endif; ?>
+                                        <div class="form-group">
+                                            <div class="panel-body">
+
+                                                <?php if (array_key_exists(2, $pictures) == false): ?>
+                                                    <?php $form3 = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+                                                    <?= $form3->field($photo, 'imageUpload')->fileInput() ?>
+                                                    <?= Html::submitButton('Add', ['class' => 'btn btn-md btn-hover btn-success', 'id' => 'profileSubmit']) ?>
+                                                    <?php $form3 = ActiveForm::end() ?>
+                                                <?php else: ?>
+
+                                                    <a href="#" class="btn btn-md btn-hover btn-info">Avatar</a>
+                                                    <a href="#" class="btn btn-md btn-hover btn-danger">Delete</a>
+
+                                                <?php endif; ?>
+
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-4 col-sm-4 col-xs-6 shine_me">
-                                        <img src="http://lorempixel.com/output/food-q-c-320-240-1.jpg" class="img-responsive"/>
-                                        <i class="shine_effect"></i>
+
+                                    <div class="form-group">
+                                        <?php if (array_key_exists(3, $pictures) == false): ?>
+                                            <img src="http://www.inserco.org/en/sites/all/modules/media_gallery/images/empty_gallery.png" class="img-responsive"/>
+                                        <?php else: ?>
+                                            <img src="<?php echo "./photo/".$settings->user_login."/".$pictures[3]?>" class="img-responsive"/>
+                                        <?php endif; ?>
+                                        <div class="form-group">
+                                            <div class="panel-body">
+
+                                                <?php if (array_key_exists(3, $pictures) == false): ?>
+                                                    <?php $form3 = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+                                                    <?= $form3->field($photo, 'imageUpload')->fileInput() ?>
+                                                    <?= Html::submitButton('Add', ['class' => 'btn btn-md btn-hover btn-success', 'id' => 'profileSubmit']) ?>
+                                                    <?php $form3 = ActiveForm::end() ?>
+                                                <?php else: ?>
+
+                                                    <a href="#" class="btn btn-md btn-hover btn-info">Avatar</a>
+                                                    <a href="#" class="btn btn-md btn-hover btn-danger">Delete</a>
+
+                                                <?php endif; ?>
+
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-4 col-sm-4 col-xs-6 shine_me">
-                                        <img src="http://lorempixel.com/output/food-q-c-320-240-2.jpg" class="img-responsive"/>
-                                        <i class="shine_effect"></i>
+
+                                    <div class="form-group ">
+                                        <?php if (array_key_exists(4, $pictures) == false): ?>
+                                            <img src="http://www.inserco.org/en/sites/all/modules/media_gallery/images/empty_gallery.png" class="img-responsive"/>
+                                        <?php else: ?>
+                                            <img src="<?php echo "./photo/".$settings->user_login."/".$pictures[4]?>" class="img-responsive"/>
+                                        <?php endif; ?>
+                                        <div class="form-group">
+                                            <div class="panel-body">
+
+                                                <?php if (array_key_exists(4, $pictures) == false): ?>
+                                                    <?php $form3 = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+                                                    <?= $form3->field($photo, 'imageUpload')->fileInput() ?>
+                                                    <?= Html::submitButton('Add', ['class' => 'btn btn-md btn-hover btn-success', 'id' => 'profileSubmit']) ?>
+                                                    <?php $form3 = ActiveForm::end() ?>
+                                                <?php else: ?>
+
+                                                    <a href="#" class="btn btn-md btn-hover btn-info">Avatar</a>
+                                                    <a href="#" class="btn btn-md btn-hover btn-danger">Delete</a>
+
+                                                <?php endif; ?>
+
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-4 col-sm-4 col-xs-6 shine_me">
-                                        <img src="http://lorempixel.com/output/food-q-c-320-240-4.jpg" class="img-responsive"/>
-                                        <i class="shine_effect"></i>
-                                    </div>
+
                                 </div>
                             </div>
-
                             <div id="menu4" class="tab-pane fade">
                                 <div class="form-group text-center">
                                     <h4> <i class="fa fa-map-marker " aria-hidden="true"></i> <?php echo $settings->user_country.", ".$settings->user_city?></h4>
@@ -256,7 +377,6 @@ $this->title = $session['loged_user'];
     </div>
 </div>
 </div>
-
 
 <script>
     var coords = {

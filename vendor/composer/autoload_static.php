@@ -19,6 +19,7 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
     public static $prefixLengthsPsr4 = array (
         'y' => 
         array (
+            'yiidreamteam\\upload\\' => 20,
             'yii\\swiftmailer\\' => 16,
             'yii\\jui\\' => 8,
             'yii\\httpclient\\' => 15,
@@ -102,6 +103,10 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
     );
 
     public static $prefixDirsPsr4 = array (
+        'yiidreamteam\\upload\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yii-dream-team/yii2-upload-behavior/src',
+        ),
         'yii\\swiftmailer\\' => 
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2-swiftmailer',
@@ -272,6 +277,14 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
             'Prophecy\\' => 
             array (
                 0 => __DIR__ . '/..' . '/phpspec/prophecy/src',
+            ),
+            'PHPThumb\\Tests' => 
+            array (
+                0 => __DIR__ . '/..' . '/masterexploder/phpthumb/tests',
+            ),
+            'PHPThumb' => 
+            array (
+                0 => __DIR__ . '/..' . '/masterexploder/phpthumb/src',
             ),
         ),
         'H' => 

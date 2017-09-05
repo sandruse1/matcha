@@ -126,7 +126,8 @@ class SiteController extends Controller
           `user_country` VARCHAR (100) DEFAULT \'хуй зна де\',
           `user_longitude` VARCHAR (100) ,
           `user_latitude` VARCHAR (100) ,
-          PRIMARY KEY (`user_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8
+          `imageUpload` VARCHAR (255),
+           PRIMARY KEY (`user_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8
         ');
         $user_table->query();
         return $this->render('index');

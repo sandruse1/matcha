@@ -26,7 +26,8 @@
         "yiisoft/yii2-jui": "*",
         "lysenkobv/yii2-geoip": "~1.0",
         "2amigos/yii2-google-maps-library": "*",
-        "kossmoss/yii2-google-maps-api": "^0.2"
+        "kossmoss/yii2-google-maps-api": "^0.2",
+        "yii-dream-team/yii2-upload-behavior": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

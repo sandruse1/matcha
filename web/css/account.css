@@ -143,3 +143,32 @@ body {
 }
 
 
+.btn-hover {
+    font-weight: normal;
+    color: #333333;
+    cursor: pointer;
+    background-color: inherit;
+    border-color: transparent;
+}
+
+.btn-hover-alt {
+    font-weight: normal;
+    color: #ffffff;
+    cursor: pointer;
+    background-color: inherit;
+    border-color: transparent;
+}
+
+#menu3 {
+    text-align: center;
+}
+
+.form-group {
+    margin-left: auto;
+    margin-right: auto;
+}
+.form-group img {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}

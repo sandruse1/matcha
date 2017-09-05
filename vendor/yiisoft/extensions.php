@@ -103,4 +103,13 @@ return array (
       '@lysenkobv/GeoIP' => $vendorDir . '/lysenkobv/yii2-geoip/src',
     ),
   ),
+  'yii-dream-team/yii2-upload-behavior' => 
+  array (
+    'name' => 'yii-dream-team/yii2-upload-behavior',
+    'version' => '1.1.1.0',
+    'alias' => 
+    array (
+      '@yiidreamteam/upload' => $vendorDir . '/yii-dream-team/yii2-upload-behavior/src',
+    ),
+  ),
 );
