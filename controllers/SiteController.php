@@ -130,6 +130,24 @@ class SiteController extends Controller
            PRIMARY KEY (`user_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8
         ');
         $user_table->query();
+
+        $search_table = Yii::$app->db->createCommand('
+          CREATE TABLE IF NOT EXISTS `search` (
+          `user_sex` INT (2),
+          `user_interest` VARCHAR (1000),
+          `user_orientation` INT (2),
+          `user_rating` INT (8),
+          `user_age` VARCHAR (15),
+          `user_distance` VARCHAR (15),
+          `user_location` VARCHAR (255),
+          `user_city` VARCHAR (100) DEFAULT \'хуй зна де\',
+          `user_country` VARCHAR (100) DEFAULT \'хуй зна де\',
+          `user_longitude` VARCHAR (100) ,
+          `user_latitude` VARCHAR (100) ,
+           PRIMARY KEY (`user_sex`)) ENGINE=InnoDB DEFAULT CHARSET=utf8
+        ');
+        $search_table->query();
+
         return $this->render('index');
     }
 

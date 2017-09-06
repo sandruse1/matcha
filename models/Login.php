@@ -31,7 +31,7 @@ class Login extends ActiveRecord
             [ ['user_email', 'user_login', 'user_password'], 'required'],
             [ ['user_login', 'user_password'], 'trim'],
             [ 'user_password', 'string', 'min' => 8],
-            ['user_login', 'string' , 'length' => [8 , 16] ],
+            ['user_login', 'string' , 'length' => [6 , 16] ],
             ['user_email', 'email'],
         ];
     }

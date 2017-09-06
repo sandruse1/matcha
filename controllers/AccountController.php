@@ -12,11 +12,14 @@ use app\models\Accountpass;
 use app\models\Accountset;
 use app\models\Photo;
 use app\models\Profiledata;
+use app\models\Search;
 use kossmoss\GoogleMaps\GoogleMaps;
 use Yii;
 use yii\helpers\FileHelper;
 use yii\web\Controller;
 use yii\web\UploadedFile;
+use yii\data\ActiveDataProvider;
+
 
 class AccountController extends Controller
 {
@@ -99,6 +102,7 @@ class AccountController extends Controller
         if ($session['loged_email']) {
             $email = $session['loged_email'];
             $profile = Profiledata::findOne(['user_email' => $email]);
+            FileHelper::createDirectory("./photo/".$profile->user_login);
             $profile->facebook = ($profile['user_facebook_id'] == NULL && $profile['user_google_id'] == NULL) ?  0  : 1;
             if ($profile->load(Yii::$app->request->post())) {
                 $post = Yii::$app->request->post('Profiledata');
@@ -134,7 +138,7 @@ class AccountController extends Controller
                     $profile->user_about = $post['user_about'];
                     $profile->user_profile_complete = 1;
                     $profile->save(false);
-                    FileHelper::createDirectory("./photo/".$profile->user_login);
+
                     $this->redirect('http://localhost:8080/matcha/web/account');
 
                 } else {
@@ -150,13 +154,20 @@ class AccountController extends Controller
     }
 
     public function actionSearch(){
+        $search = new Search();
+        $dataProvider = new ActiveDataProvider([
+            'query' => \app\models\Profiledata::find()->where(['user_profile_complete'=>1])->orderBy('user_id'),
+            'pagination' => [
+                'pageSize' => 12,
+                'validatePage' => false,
+            ],
+        ]);
+        if ($search->load(Yii::$app->request->post())){
+            var_dump(Yii::$app->request->post('Search'));
+            die();
+        }
 
-        return $this->render('search');
-    }
-
-    public function actionSettings(){
-
-        return $this->render('settings');
+        return $this->render('search', compact('search', 'dataProvider'));
     }
 
     public function actionExit(){

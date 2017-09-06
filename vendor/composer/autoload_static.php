@@ -42,7 +42,10 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
         'k' => 
         array (
             'kotchuprik\\authclient\\' => 22,
+            'kop\\y2sp\\' => 9,
             'kmarenov\\instagram\\' => 19,
+            'kartik\\slider\\' => 14,
+            'kartik\\base\\' => 12,
         ),
         'd' => 
         array (
@@ -161,9 +164,21 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
         array (
             0 => __DIR__ . '/..' . '/kotchuprik/yii2-instagram-authclient',
         ),
+        'kop\\y2sp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kop/yii2-scroll-pager',
+        ),
         'kmarenov\\instagram\\' => 
         array (
             0 => __DIR__ . '/..' . '/kmarenov/yii2-instagram-widget',
+        ),
+        'kartik\\slider\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-slider',
+        ),
+        'kartik\\base\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-krajee-base',
         ),
         'dosamigos\\google\\maps\\' => 
         array (

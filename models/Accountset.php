@@ -42,6 +42,7 @@ class Accountset extends ActiveRecord
             [ ['user_name', 'user_secondname' , 'user_login',   'user_interest', 'user_phone', 'user_about'], 'trim'],
             [ ['user_name', 'user_secondname'] , 'string', 'length' => [2, 20]],
             ['user_login', 'string' , 'length' => [6 , 12] ],
+            ['user_interest' , 'match', 'pattern' => '/^(#\w+(\s)?)+$/', 'message' => 'Something\'s wrong'],
 //            ['user_day_of_birth', 'string' , 'length' => [10 , 10] ],
             ['user_phone' , 'match', 'pattern' => '/^\+38\s\([0-9]{3}\)\s[0-9]{3}\-[0-9]{2}\-[0-9]{2}$/', 'message' => 'Something\'s wrong'],
             [['user_about', 'user_interest'], 'string' , 'max' => 1000 ],

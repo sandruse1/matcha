@@ -12,4 +12,3 @@ $(document).ready(function(){
     $(".upload-image").dropzone();
 });
 
-
