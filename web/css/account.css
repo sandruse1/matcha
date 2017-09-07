@@ -195,3 +195,10 @@ body {
 
 /*----------USER PAGE__________*/
 
+.filter-col{
+    padding-left:10px;
+    padding-right:10px;
+}
+.btn-for-submit {
+    float: right;
+}

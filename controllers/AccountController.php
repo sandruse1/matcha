@@ -15,11 +15,14 @@ use app\models\Profiledata;
 use app\models\Search;
 use kossmoss\GoogleMaps\GoogleMaps;
 use Yii;
+use yii\data\ArrayDataProvider;
 use yii\helpers\FileHelper;
 use yii\web\Controller;
 use yii\web\UploadedFile;
 use yii\data\ActiveDataProvider;
+use yii\i18n\Formatter;
 
+define('EARTH_RADIUS', 6372795);
 
 class AccountController extends Controller
 {
@@ -94,6 +97,19 @@ class AccountController extends Controller
         return $this->render('message');
     }
 
+    function getFullYears($userBirthday) { // День рождение юзера
+
+        $birthday = strtotime($userBirthday); // Получаем unix timestamp нашего дня рождения
+
+        $years = date('Y') - date('Y',$birthday); // Вычисляем возраст БЕЗ учета текущего месяца и дня
+        $now = time(); // no comments
+        $nowBirthday = mktime(0,0,0,date('m',$birthday),date('d',$birthday),date('Y')); // Получаем день рождение пользователя в этом году
+        if ($nowBirthday > $now) {
+            $years --; // Если дня рождения ещё не было то вычитаем один год
+        }
+        return $years;
+    }
+
     public function actionProfiledata(){
         $session = Yii::$app->session;
         $session->open();
@@ -131,6 +147,9 @@ class AccountController extends Controller
                         $profile->user_avatar = 'photo/' . $profile->user_login . "/avatar.jpg";
                     }
                     $profile->user_day_of_birth = $post['user_day_of_birth'];
+
+                    $profile->user_age = $this->getFullYears($post['user_day_of_birth']);
+
                     $profile->user_sex = $post['user_sex'];
                     $profile->user_orientation = $post['user_orientation'];
                     $profile->user_interest = $post['user_interest'];
@@ -153,19 +172,114 @@ class AccountController extends Controller
         }
     }
 
+    function calculateTheDistance ($φA, $λA, $φB, $λB) {
+
+        // перевести координаты в радианы
+        $lat1 = $φA * M_PI / 180;
+        $lat2 = $φB * M_PI / 180;
+        $long1 = $λA * M_PI / 180;
+        $long2 = $λB * M_PI / 180;
+
+        // косинусы и синусы широт и разницы долгот
+        $cl1 = cos($lat1);
+        $cl2 = cos($lat2);
+        $sl1 = sin($lat1);
+        $sl2 = sin($lat2);
+        $delta = $long2 - $long1;
+        $cdelta = cos($delta);
+        $sdelta = sin($delta);
+
+        // вычисления длины большого круга
+        $y = sqrt(pow($cl2 * $sdelta, 2) + pow($cl1 * $sl2 - $sl1 * $cl2 * $cdelta, 2));
+        $x = $sl1 * $sl2 + $cl1 * $cl2 * $cdelta;
+
+        //
+        $ad = atan2($y, $x);
+        $dist = $ad * EARTH_RADIUS;
+
+        return $dist / 1000;
+    }
+
     public function actionSearch(){
         $search = new Search();
-        $dataProvider = new ActiveDataProvider([
-            'query' => \app\models\Profiledata::find()->where(['user_profile_complete'=>1])->orderBy('user_id'),
+        $search->user_rating = 0;
+        $search->user_distance = 0;
+        $session = Yii::$app->session;
+        $email = $session['loged_email'];
+        $loged_user = Profiledata::findOne(['user_email' => $email]);
+        $reqes = Yii::$app->request->post('Search');
+        $search->user_sex = ($loged_user->user_sex == 1) ? 0 : 1;
+
+        if ($search->load(Yii::$app->request->post())) {
+
+            $user_sex = $reqes['user_sex'];
+
+            $user_orientation = $reqes['user_orientation'];
+
+            $user_age = explode(",", $reqes['user_age']);
+            $user_age_array = range($user_age[0], $user_age[1]);
+
+            $user_rating = explode(",", $reqes['user_rating']);
+            $user_rating_array = range($user_rating[0], $user_rating[1]);
+
+            $user_location_param = $reqes['user_location'];
+
+            if ($user_location_param == "1") {
+                $user = \app\models\Profiledata::find()->where(['user_sex' => $user_sex, 'user_orientation' => $user_orientation,
+                    'user_age' => $user_age_array, 'user_rating' => $user_rating_array, 'user_city' => $loged_user->user_city])->asArray()->all();
+            } else {
+
+                $user_distance = explode(",", $reqes['user_distance']);
+                $user_distance_start = $user_distance[0];
+                $user_distance_end = $user_distance[1];
+
+                $user = \app\models\Profiledata::find()->where(['user_sex' => $user_sex, 'user_orientation' => $user_orientation,
+                    'user_age' => $user_age_array, 'user_rating' => $user_rating_array])->asArray()->all();
+
+                foreach ($user as $key => $member) {
+                    $distance = $this->calculateTheDistance($member['user_latitude'], $member['user_longitude'], $loged_user->user_latitude, $loged_user->user_longitude);
+                    if (!($distance >= $user_distance_start && $distance <= $user_distance_end)) {
+                        unset($user[$key]);
+                    }
+                }
+            }
+
+            if ($reqes['user_interest'] != NULL){
+
+                $user_interest = explode(" ", $reqes['user_interest']) ;
+
+                foreach ($user as $key => $member) {
+                    if (!(array_intersect(explode(" ", $member['user_interest']), $user_interest))){
+                        unset($user[$key]);
+                    }
+                }
+            }
+
+            foreach ($user as $key => $member) {
+                if (strcmp($member['user_login'], $loged_user->user_login) == 0){
+                    unset($user[$key]);
+                }
+            }
+
+        } else {
+
+            $user_sex = ($loged_user->user_sex == 1) ? 0 : 1;
+            $user_orientation = $loged_user->user_orientation;
+            $user_age_array = range($loged_user->user_age - 2, $loged_user->user_age + 2);
+            $user_rating_array = range(0, 100);
+
+            $user = Profiledata::find()->where(['user_sex' => $user_sex, 'user_orientation' => $user_orientation,
+                'user_age' => $user_age_array, 'user_rating' => $user_rating_array, 'user_city' => $loged_user->user_city])->asArray()->all();
+
+        }
+
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $user,
             'pagination' => [
                 'pageSize' => 12,
                 'validatePage' => false,
             ],
         ]);
-        if ($search->load(Yii::$app->request->post())){
-            var_dump(Yii::$app->request->post('Search'));
-            die();
-        }
 
         return $this->render('search', compact('search', 'dataProvider'));
     }

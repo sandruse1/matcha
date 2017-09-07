@@ -37,7 +37,7 @@ $this->title = 'Search';
                         <div class="col-md-4">
                             <div class="form-group">
                                 <b class="badge">Sex</b>
-                                <?php $search->user_sex = 1; ?>
+
                                 <?= $form->field($search, 'user_sex')->dropDownList(['1'=>'Male', '0' =>'Female'])->label(false) ?>
                             </div>
                         </div>
@@ -52,7 +52,7 @@ $this->title = 'Search';
 
                         <div class="col-md-4">
                             <div class=" form-group">
-                                <b class="badge">Age : From 18 To 80</b>
+                                <b class="badge">Age : </b>
                                 <?=
                                 $form->field($search, 'user_age')->widget(Slider::className(), [
                                     'name'=>'age',
@@ -62,7 +62,8 @@ $this->title = 'Search';
                                         'min'=>18,
                                         'max'=>80,
                                         'step'=>1,
-                                        'range'=>true
+                                        'range'=>true,
+                                        'tooltip'=>'always'
                                     ]])->label(false);
                                 ?>
                             </div>
@@ -70,22 +71,25 @@ $this->title = 'Search';
 
                         <div class="col-md-4">
                             <div class=" form-group">
-                                <b class="badge">Rating : From 0 To 100</b>
+                                <b class="badge">Rating :</b>
                                 <?=
                                 $form->field($search, 'user_rating')->widget(Slider::className(), [
-                                    'name'=>'rating_3',
-                                    'value'=>'0,50',
+                                    'name'=>'rat',
+
                                     'sliderColor'=>Slider::TYPE_GREY,
                                     'pluginOptions'=>[
+                                        'orientation' => 'horizontal',
+                                        'handle' => 'round',
                                         'min'=>0,
-                                        'max'=>100,
-                                        'step'=>5,
-                                        'range'=>true
+                                        'max'=>10,
+                                        'step'=>0.5,
+                                        'range'=>true,
+                                        'tooltip'=>'always'
                                     ]])->label(false);
                                 ?>
                             </div>
                         </div>
-<!--                        ->widget(MaskedInput::className(),['mask'=>'+38 (999) 999-99-99'])-->
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <b class="badge">Interest and hobby</b>
@@ -106,13 +110,13 @@ $this->title = 'Search';
 JS;
                              ?>
                                 <?php $search->user_location = 1; ?>
-                                <?= $form->field($search, 'user_location')->radioList(['1'=>'Near you', '0' =>'By distance '], [
+                                <?= $form->field($search, 'user_location')->radioList(['1'=>'Near you (From your city)', '0' =>'By distance '], [
                                     'onchange' => new \yii\web\JsExpression($onChangeJs)
                                 ])->label(false) ?>
                             </div>
 
                             <div id="bydistance"  class="hide form-group">
-                                <b class="badge">Distance : From 0 To 160 </b>
+                                <b class="badge">Distance :  </b>
                                 <?= $form->field($search, 'user_distance')->widget(Slider::className(), [
                                         'name'=>'distance',
                                         'value'=>'0,60',
@@ -121,24 +125,41 @@ JS;
                                             'min'=>0,
                                             'max'=>160,
                                             'step'=>5,
-                                            'range'=>true
+                                            'range'=>true,
+                                            'tooltip'=>'always'
                                         ]])->label(false);
                                 ?>
                             </div>
                         </div>
 
-                        <div class="col-md-11 text-right">
-                            <?= Html::submitButton('Submit', ['class' => 'btn-primary btn btn-submit', 'id' => 'accountsetSubmit']) ?>
-                        </div>
 
+
+                        <div class="col-md-4">
+                            <div id="filter-panel" class="collapse filter-panel form-group">
+                                <div class="panel panel-default ">
+                                    <div class=" panel-body">
+                                        <p>hfhf</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#filter-panel">
+                                <span class="glyphicon glyphicon-cog"></span> Sort & Filter
+                            </button>
+                            <?= Html::submitButton('Submit', ['class' => 'btn-primary btn btn-submit btn-for-submit', 'id' => 'accountsetSubmit']) ?>
+                        </div>
                         <?php $form = ActiveForm::end() ?>
                     </div>
+                    <br>
+
+
+
+
                 </div>
             </div>
         </div>
 
 <!-----------------------USER LIST------------>
-
+        <br>
         <div class="form-group">
             <div class="col-md-10 col-md-offset-1">
             <?php Pjax::begin();
