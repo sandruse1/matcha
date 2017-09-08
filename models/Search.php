@@ -19,7 +19,8 @@ class Search extends ActiveRecord
     public function attributeLabels()
     {
         return [
-
+            'user_age_filter_checked' => 'By Age',
+'user_rating_filter_checked' => 'By Rating',
             'user_sex' => '',
             'user_interest' => '',
             'user_orientation' => '',

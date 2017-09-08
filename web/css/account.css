@@ -200,5 +200,10 @@ body {
     padding-right:10px;
 }
 .btn-for-submit {
+
     float: right;
+}
+
+.buttonclass{
+    width: 100%;
 }

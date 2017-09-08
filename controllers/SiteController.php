@@ -124,8 +124,8 @@ class SiteController extends Controller
           `user_profile_complete` INT (1) DEFAULT \'0\',
           `user_password` VARCHAR (1000) ,
           `user_rep_password` VARCHAR (1000),
-          `user_city` VARCHAR (100) DEFAULT \'хуй зна де\',
-          `user_country` VARCHAR (100) DEFAULT \'хуй зна де\',
+          `user_city` VARCHAR (100) ,
+          `user_country` VARCHAR (100) ,
           `user_longitude` VARCHAR (100) ,
           `user_latitude` VARCHAR (100) ,
           `imageUpload` VARCHAR (255),
@@ -135,18 +135,26 @@ class SiteController extends Controller
 
         $search_table = Yii::$app->db->createCommand('
           CREATE TABLE IF NOT EXISTS `search` (
+          `master_login` VARCHAR (15),
           `user_sex` INT (2),
           `user_interest` VARCHAR (1000),
+          `user_interest_filter` VARCHAR (1000),
           `user_orientation` INT (2),
-          `user_rating` INT (2),
+          `user_rating` VARCHAR (15),
+          `user_rating_filter` INT (2),
+          `user_rating_filter_checked` INT (2),
           `user_age` VARCHAR (15),
+          `user_order` VARCHAR (15),
+          `user_order_how` VARCHAR (15),
+          `user_age_filter` VARCHAR (15),
+          `user_age_filter_checked` INT (2),
           `user_distance` VARCHAR (15),
           `user_location` VARCHAR (255),
-          `user_city` VARCHAR (100) DEFAULT \'хуй зна де\',
-          `user_country` VARCHAR (100) DEFAULT \'хуй зна де\',
+          `user_city` VARCHAR (100) ,
+          `user_country` VARCHAR (100) ,
           `user_longitude` VARCHAR (100) ,
           `user_latitude` VARCHAR (100) ,
-           PRIMARY KEY (`user_sex`)) ENGINE=InnoDB DEFAULT CHARSET=utf8
+           PRIMARY KEY (`user_age`)) ENGINE=InnoDB DEFAULT CHARSET=utf8
         ');
         $search_table->query();
 

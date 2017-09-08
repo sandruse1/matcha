@@ -22,7 +22,33 @@ use yii\widgets\Pjax;
 
 $this->title = 'Search';
 ?>
-
+<?php
+$onChangeJs= <<<JS
+                             if ($(this).find('input:checked').val() == 0){
+                                 $("#bydistance").removeClass("hide");
+                             } else {
+                                 $("#bydistance").addClass("hide");
+                             }
+JS;
+?>
+<?php
+$onChangeJs_rating= <<<JS
+                            if ($(this).is(':checked')){
+                                 $("#user_rating").removeClass("hide");
+                             } else {
+                                 $("#user_rating").addClass("hide");
+                             }
+JS;
+?>
+<?php
+$onChangeJs_age= <<<JS
+                            if ($(this).is(':checked')){
+                                 $("#user_age").removeClass("hide");
+                             } else {
+                                 $("#user_age").addClass("hide");
+                             }
+JS;
+?>
 
 <div class="search">
     <div class="container">
@@ -75,7 +101,7 @@ $this->title = 'Search';
                                 <?=
                                 $form->field($search, 'user_rating')->widget(Slider::className(), [
                                     'name'=>'rat',
-
+                                    'value'=>'0,10',
                                     'sliderColor'=>Slider::TYPE_GREY,
                                     'pluginOptions'=>[
                                         'orientation' => 'horizontal',
@@ -100,15 +126,6 @@ $this->title = 'Search';
                         <div class="col-md-4">
                             <div class="form-group">
                                 <b class="badge">Location</b>
-                                <?php
-                                $onChangeJs= <<<JS
-                             if ($(this).find('input:checked').val() == 0){
-                                 $("#bydistance").removeClass("hide");
-                             } else {
-                                 $("#bydistance").addClass("hide");
-                             }
-JS;
-                             ?>
                                 <?php $search->user_location = 1; ?>
                                 <?= $form->field($search, 'user_location')->radioList(['1'=>'Near you (From your city)', '0' =>'By distance '], [
                                     'onchange' => new \yii\web\JsExpression($onChangeJs)
@@ -119,13 +136,14 @@ JS;
                                 <b class="badge">Distance :  </b>
                                 <?= $form->field($search, 'user_distance')->widget(Slider::className(), [
                                         'name'=>'distance',
-                                        'value'=>'0,60',
+                                        'value'=>'0,160',
                                         'sliderColor'=>Slider::TYPE_GREY,
                                         'pluginOptions'=>[
                                             'min'=>0,
                                             'max'=>160,
                                             'step'=>5,
                                             'range'=>true,
+
                                             'tooltip'=>'always'
                                         ]])->label(false);
                                 ?>
@@ -134,11 +152,69 @@ JS;
 
 
 
-                        <div class="col-md-4">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div id="filter-panel" class="collapse filter-panel form-group">
                                 <div class="panel panel-default ">
                                     <div class=" panel-body">
-                                        <p>hfhf</p>
+
+                                                    <div class="form-group">
+
+                                                        <label class="" for="startDate">Interest or hobby</label>
+                                                        <?= $form->field($search, 'user_interest_filter')->textInput([ 'placeholder' => '#sport', 'class' => 'form-control'])->label(false) ?>
+
+                                                        <div class="form-group">
+                                                            <?php echo $form->field($search, 'user_rating_filter_checked')->checkbox( [
+                                                                'onchange' => new \yii\web\JsExpression($onChangeJs_rating)]); ?>
+                                                            <div class="hide" id="user_rating">
+                                                                <label class="" for="endDate">User rating</label>
+                                                                <?= $form->field($search, 'user_rating_filter')->widget(Slider::className(), [
+                                                                'name'=>'rating_filter',
+
+                                                                'sliderColor'=>Slider::TYPE_SUCCESS,
+                                                                'handleColor'=>Slider::TYPE_DANGER,
+                                                                'pluginOptions'=>[
+                                                                    'orientation' => 'horizontal',
+                                                                    'handle' => 'round',
+                                                                    'min'=>0,
+                                                                    'max'=>10,
+                                                                    'step'=>0.2,
+
+                                                                ]])->label(false); ?>
+                                                            </div>
+                                                        </div>
+
+
+
+                                                        <div class="form-group">
+                                                            <?php echo $form->field($search, 'user_age_filter_checked')->checkbox([
+                                                                'onchange' => new \yii\web\JsExpression($onChangeJs_age)]); ?>
+                                                            <div class="hide" id="user_age">
+                                                                <label class="" for="endDate">User age</label>
+                                                                <?=   $form->field($search, 'user_age_filter')->widget(Slider::className(), [
+                                                                'name'=>'age_filter',
+
+                                                                'sliderColor'=>Slider::TYPE_SUCCESS,
+                                                                'handleColor'=>Slider::TYPE_DANGER,
+                                                                'pluginOptions'=>[
+                                                                    'orientation' => 'horizontal',
+                                                                    'handle' => 'round',
+                                                                    'min'=>18,
+                                                                    'max'=>80,
+                                                                    'step'=>1,
+
+                                                                ]])->label(false);      ?>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="" for="orderBy">Order by</label>
+                                                            <?= $form->field($search, 'user_order')->dropDownList(['user_age'=>'Age', 'user_rating' =>'Rating', 'user_location' =>'Location' ])->label(false) ?>
+                                                            <label class="" for="orderBy">From -> To </label>
+                                                            <?= $form->field($search, 'user_order_how')->dropDownList(['SORT_ASC'=>'Min -> Max', 'SORT_DESC' =>'Max -> Min'])->label(false) ?>
+                                                        </div>
+                                                    </div>
+                                        <?= Html::submitButton('Filter', ['class' => 'btn-primary btn btn-submit btn-for-submit', 'id' => 'accountsetSubmit', 'name' => 'Filter']) ?>
+
                                     </div>
                                 </div>
                             </div>

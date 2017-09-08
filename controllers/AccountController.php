@@ -27,6 +27,7 @@ define('EARTH_RADIUS', 6372795);
 class AccountController extends Controller
 {
     public $layout = 'user';
+    public $loged_user;
 
     public function actionAccount(){
 
@@ -200,78 +201,177 @@ class AccountController extends Controller
         return $dist / 1000;
     }
 
+     function searchAlgoritm($reqes, $loged_user, $atribute, $sort_type){
+
+        if ($atribute == 'user_location'){
+            $atribute = 'user_age';
+            $sort_type = 'SORT_ASC';
+        }
+
+        $user_sex = $reqes['user_sex'];
+
+        $user_orientation = $reqes['user_orientation'];
+
+        $user_age = explode(",", $reqes['user_age']);
+        $user_age_array = range($user_age[0], $user_age[1]);
+
+        $user_rating = explode(",", $reqes['user_rating']);
+        $user_rating_array = range($user_rating[0], $user_rating[1]);
+
+        $user_location_param = $reqes['user_location'];
+
+        if ($user_location_param == "1") {
+            if ($sort_type == 'SORT_ASC') {
+                $user = \app\models\Profiledata::find()->where(['user_sex' => $user_sex, 'user_orientation' => $user_orientation, 'user_age' => $user_age_array, 'user_rating' => $user_rating_array, 'user_city' => $loged_user->user_city])->orderBy([$atribute => SORT_ASC])->asArray()->all();
+            }else{
+                $user = \app\models\Profiledata::find()->where(['user_sex' => $user_sex, 'user_orientation' => $user_orientation, 'user_age' => $user_age_array, 'user_rating' => $user_rating_array, 'user_city' => $loged_user->user_city])->orderBy([$atribute => SORT_DESC])->asArray()->all();
+
+            }
+        } else {
+
+            $user_distance = explode(",", $reqes['user_distance']);
+            $user_distance_start = $user_distance[0];
+            $user_distance_end = $user_distance[1];
+            if ($sort_type == 'SORT_ASC') {
+                $user = \app\models\Profiledata::find()->where(['user_sex' => $user_sex, 'user_orientation' => $user_orientation, 'user_age' => $user_age_array, 'user_rating' => $user_rating_array])->orderBy([$atribute => SORT_ASC])->asArray()->all();
+            }
+            else{
+                $user = \app\models\Profiledata::find()->where(['user_sex' => $user_sex, 'user_orientation' => $user_orientation, 'user_age' => $user_age_array, 'user_rating' => $user_rating_array])->orderBy([$atribute => SORT_DESC])->asArray()->all();
+
+            }
+            foreach ($user as $key => $member) {
+                $distance = $this->calculateTheDistance($member['user_latitude'], $member['user_longitude'], $loged_user->user_latitude, $loged_user->user_longitude);
+                if (!($distance >= $user_distance_start && $distance <= $user_distance_end)) { unset($user[$key]); }
+            }
+        }
+
+        if ($reqes['user_interest'] != NULL) {
+            $user_interest = explode(" ", $reqes['user_interest']);
+            foreach ($user as $key => $member) {
+                if (!(array_intersect(explode(" ", $member['user_interest']), $user_interest))) { unset($user[$key]); }
+                if (strcmp($member['user_login'], $loged_user->user_login) == 0) {  unset($user[$key]);  }
+            }
+        }
+
+        return $user;
+    }
+
+    function cmp($a, $b) {
+        if ($this->calculateTheDistance($a['user_latitude'], $a['user_longitude'],$this->loged_user->user_latitude, $this->loged_user->user_longitude) == $this->calculateTheDistance($b['user_latitude'], $b['user_longitude'],$this->loged_user->user_latitude, $this->loged_user->user_longitude)) {
+            return 0;
+        }
+            return ($this->calculateTheDistance($a['user_latitude'], $a['user_longitude'],$this->loged_user->user_latitude, $this->loged_user->user_longitude) < $this->calculateTheDistance($b['user_latitude'], $b['user_longitude'],$this->loged_user->user_latitude, $this->loged_user->user_longitude)) ? -1 : 1;
+        }
+
+    function cmpr($a, $b) {
+        if ($this->calculateTheDistance($a['user_latitude'], $a['user_longitude'],$this->loged_user->user_latitude, $this->loged_user->user_longitude) == $this->calculateTheDistance($b['user_latitude'], $b['user_longitude'],$this->loged_user->user_latitude, $this->loged_user->user_longitude)) {
+            return 0;
+        }
+        return ($this->calculateTheDistance($a['user_latitude'], $a['user_longitude'],$this->loged_user->user_latitude, $this->loged_user->user_longitude) < $this->calculateTheDistance($b['user_latitude'], $b['user_longitude'],$this->loged_user->user_latitude, $this->loged_user->user_longitude)) ? 1 : -1;
+    }
+
     public function actionSearch(){
-        $search = new Search();
-        $search->user_rating = 0;
-        $search->user_distance = 0;
         $session = Yii::$app->session;
         $email = $session['loged_email'];
         $loged_user = Profiledata::findOne(['user_email' => $email]);
+        $this->loged_user = $loged_user;
+
+        if (Search::findOne(['master_login' => $session['loged_user']])) {
+           $search = Search::findOne(['master_login' => $session['loged_user']]);
+           $flag = 1;
+        } else {
+            $flag = 0;
+            $search = new Search();
+            $search->user_rating = 0;
+            $search->user_rating_filter = 0;
+            $search->user_distance = 0;
+            $search->user_sex = ($loged_user->user_sex == 1) ? 0 : 1;
+        }
+
         $reqes = Yii::$app->request->post('Search');
-        $search->user_sex = ($loged_user->user_sex == 1) ? 0 : 1;
 
-        if ($search->load(Yii::$app->request->post())) {
+        if ($search->load(Yii::$app->request->post()) && array_key_exists('Filter', Yii::$app->request->post())){
 
-            $user_sex = $reqes['user_sex'];
+            $user_interest_filter = $reqes['user_interest_filter'];
+            $user_rating_filter = $reqes['user_rating_filter'];
+            $user_rating_filter_checked = $reqes['user_rating_filter_checked'];
+            $user_age_filter = $reqes['user_age_filter'];
+            $user_age_filter_checked = $reqes['user_age_filter_checked'];
+            $user_order = $reqes['user_order'];
+            $user_order_how = $reqes['user_order_how'];
 
-            $user_orientation = $reqes['user_orientation'];
+            $reqes['user_sex'] = $search->user_sex ;
+            $reqes['user_orientation'] = $search->user_orientation;
+            $reqes['user_age'] = $search->user_age;
+            $reqes['user_rating'] = $search->user_rating ;
+            $reqes['user_interest'] = $search->user_interest;
+            $reqes['user_location'] = $search->user_location;
+            $reqes['user_distance'] = $search->user_distance ;
 
-            $user_age = explode(",", $reqes['user_age']);
-            $user_age_array = range($user_age[0], $user_age[1]);
+            $user = $this->searchAlgoritm($reqes, $loged_user, $user_order, $user_order_how);
 
-            $user_rating = explode(",", $reqes['user_rating']);
-            $user_rating_array = range($user_rating[0], $user_rating[1]);
-
-            $user_location_param = $reqes['user_location'];
-
-            if ($user_location_param == "1") {
-                $user = \app\models\Profiledata::find()->where(['user_sex' => $user_sex, 'user_orientation' => $user_orientation,
-                    'user_age' => $user_age_array, 'user_rating' => $user_rating_array, 'user_city' => $loged_user->user_city])->asArray()->all();
-            } else {
-
-                $user_distance = explode(",", $reqes['user_distance']);
-                $user_distance_start = $user_distance[0];
-                $user_distance_end = $user_distance[1];
-
-                $user = \app\models\Profiledata::find()->where(['user_sex' => $user_sex, 'user_orientation' => $user_orientation,
-                    'user_age' => $user_age_array, 'user_rating' => $user_rating_array])->asArray()->all();
-
-                foreach ($user as $key => $member) {
-                    $distance = $this->calculateTheDistance($member['user_latitude'], $member['user_longitude'], $loged_user->user_latitude, $loged_user->user_longitude);
-                    if (!($distance >= $user_distance_start && $distance <= $user_distance_end)) {
-                        unset($user[$key]);
-                    }
-                }
-            }
-
-            if ($reqes['user_interest'] != NULL){
-
-                $user_interest = explode(" ", $reqes['user_interest']) ;
-
-                foreach ($user as $key => $member) {
-                    if (!(array_intersect(explode(" ", $member['user_interest']), $user_interest))){
-                        unset($user[$key]);
-                    }
-                }
+            if ($user_order == 'user_location' && $user_order_how == 'SORT_ASC'){
+                usort($user, array($this,"cmp"));
+            }else if ($user_order == 'user_location' && $user_order_how == 'SORT_DESC'){
+                usort($user, [$this,'cmpr']);
             }
 
             foreach ($user as $key => $member) {
-                if (strcmp($member['user_login'], $loged_user->user_login) == 0){
-                    unset($user[$key]);
-                }
+                if ($user_age_filter_checked == 1 && $member['user_age'] != $user_age_filter ){ unset($user[$key]); }
+                if ($user_rating_filter_checked == 1 && $member['user_rating'] != $user_rating_filter ){ unset($user[$key]); }
+                if ($user_interest_filter != NULL && !(array_intersect(explode(" ", $member['user_interest']),explode(' ',$user_interest_filter)))) { unset($user[$key]); }
             }
 
-        } else {
+            $search->delete();
+            return $this->redirect(['search']);
 
-            $user_sex = ($loged_user->user_sex == 1) ? 0 : 1;
-            $user_orientation = $loged_user->user_orientation;
-            $user_age_array = range($loged_user->user_age - 2, $loged_user->user_age + 2);
-            $user_rating_array = range(0, 100);
+        }elseif ($search->load(Yii::$app->request->post())) {
 
-            $user = Profiledata::find()->where(['user_sex' => $user_sex, 'user_orientation' => $user_orientation,
-                'user_age' => $user_age_array, 'user_rating' => $user_rating_array, 'user_city' => $loged_user->user_city])->asArray()->all();
+                $user = $this->searchAlgoritm($reqes, $loged_user, "user_age", 'SORT_ASC');
 
-        }
+                $search->user_sex = $reqes['user_sex'];
+                $search->user_orientation = $reqes['user_orientation'];
+                $search->user_age = $reqes['user_age'];
+                $search->user_rating = $reqes['user_rating'];
+                $search->user_interest = $reqes['user_interest'];
+                $search->user_location = $reqes['user_location'];
+                $search->user_distance = $reqes['user_distance'];
+                $search->master_login = $loged_user->user_login;
+                $search->save(false);
+
+            return $this->redirect(['search']);
+            } else {
+
+            if ($flag == 0) {
+                $search->user_sex = ($loged_user->user_sex == 1) ? 0 : 1;
+                $search->user_orientation = $loged_user->user_orientation;
+                $search->user_age = ($loged_user->user_age - 2) . "," . ($loged_user->user_age + 2);
+                $search->user_rating = "0,10";
+                $search->user_location = 1;
+                $search->master_login = $loged_user->user_login;
+
+                $user_sex = ($loged_user->user_sex == 1) ? 0 : 1;
+                $user_orientation = $loged_user->user_orientation;
+                $user_age_array = range($loged_user->user_age - 2, $loged_user->user_age + 2);
+                $user_rating_array = range(0, 10);
+                $user = Profiledata::find()->where(['user_sex' => $user_sex, 'user_orientation' => $user_orientation, 'user_age' => $user_age_array, 'user_rating' => $user_rating_array, 'user_city' => $loged_user->user_city])->orderBy(['user_age' => SORT_ASC])->asArray()->all();
+            }else {
+                $reqes['user_sex'] = $search->user_sex ;
+                $reqes['user_orientation'] = $search->user_orientation;
+                $reqes['user_age'] = $search->user_age;
+                $reqes['user_rating'] = $search->user_rating ;
+                $reqes['user_interest'] = $search->user_interest;
+                $reqes['user_location'] = $search->user_location;
+                $reqes['user_distance'] = $search->user_distance ;
+
+                if ($search->user_order == ''){
+                    $search->user_order = 'user_age';
+                }
+
+                $user = $this->searchAlgoritm($reqes, $loged_user, $search->user_order, $search->user_order_how);
+            }
+
+            }
 
         $dataProvider = new ArrayDataProvider([
             'allModels' => $user,
@@ -282,6 +382,7 @@ class AccountController extends Controller
         ]);
 
         return $this->render('search', compact('search', 'dataProvider'));
+
     }
 
     public function actionExit(){
