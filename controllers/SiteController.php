@@ -108,13 +108,15 @@ class SiteController extends Controller
           `user_name` VARCHAR (100) NOT NULL ,
           `user_secondname` VARCHAR (100) NOT NULL,
           `user_sex` INT (2),
+          `user_friend` INT (10) DEFAULT \'0\',
+          `user_friend_array` VARCHAR (10000),
           `user_about` VARCHAR (1000),
           `user_interest` VARCHAR (1000),
           `user_orientation` INT (2),
           `user_email` VARCHAR (100) NOT NULL,
           `user_login` VARCHAR (20) ,
           `user_age` INT (3),
-          `user_rating` INT (3) DEFAULT \'0\',
+          `user_rating` INT (3) DEFAULT \'5\',
           `user_avatar` VARCHAR (255),
           `user_day_of_birth` VARCHAR (15),
           `user_phone` VARCHAR (20),
@@ -157,6 +159,16 @@ class SiteController extends Controller
            PRIMARY KEY (`user_age`)) ENGINE=InnoDB DEFAULT CHARSET=utf8
         ');
         $search_table->query();
+
+        $user_user_table = Yii::$app->db->createCommand('
+          CREATE TABLE IF NOT EXISTS `user_user` (
+          `user_id_min` INT (11) NOT NULL,
+          `user_user_min` VARCHAR (10)  ,
+          `user_user_max` VARCHAR (10)  ,
+          `user_id_max` INT (11) NOT NULL,
+           PRIMARY KEY (`user_id_min`)) ENGINE=InnoDB DEFAULT CHARSET=utf8
+        ');
+        $user_user_table->query();
 
         return $this->render('index');
     }

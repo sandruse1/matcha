@@ -273,8 +273,9 @@ $this->title = $session['loged_user'];
                                                     <?php $form3 = ActiveForm::end() ?>
                                                 <?php else: ?>
 
-                                                    <a href="#" class="btn btn-md btn-hover btn-info">Avatar</a>
-                                                    <a href="#" class="btn btn-md btn-hover btn-danger">Delete</a>
+                                                    <button onclick="toAvatar('<?php echo "./photo/".$settings->user_login."/".$pictures[1]?>' , '<?php echo $settings->user_avatar ?>','<?php echo $settings->user_login?>' )" class="btn btn-md btn-hover btn-info">Avatar</button>
+                                                    <button onclick="deletePhoto('<?php echo "./photo/".$settings->user_login."/".$pictures[1]?>')" class="btn btn-md btn-hover btn-danger">Delete</button>
+
 
                                                 <?php endif; ?>
 
@@ -298,8 +299,9 @@ $this->title = $session['loged_user'];
                                                     <?php $form3 = ActiveForm::end() ?>
                                                 <?php else: ?>
 
-                                                    <a href="#" class="btn btn-md btn-hover btn-info">Avatar</a>
-                                                    <a href="#" class="btn btn-md btn-hover btn-danger">Delete</a>
+                                                    <button onclick="toAvatar('<?php echo "./photo/".$settings->user_login."/".$pictures[2]?>' , '<?php echo $settings->user_avatar ?>','<?php echo $settings->user_login?>' )" class="btn btn-md btn-hover btn-info">Avatar</button>
+                                                    <button onclick="deletePhoto('<?php echo "./photo/".$settings->user_login."/".$pictures[2]?>')" class="btn btn-md btn-hover btn-danger">Delete</button>
+
 
                                                 <?php endif; ?>
 
@@ -323,8 +325,9 @@ $this->title = $session['loged_user'];
                                                     <?php $form3 = ActiveForm::end() ?>
                                                 <?php else: ?>
 
-                                                    <a href="#" class="btn btn-md btn-hover btn-info">Avatar</a>
-                                                    <a href="#" class="btn btn-md btn-hover btn-danger">Delete</a>
+                                                    <button onclick="toAvatar('<?php echo "./photo/".$settings->user_login."/".$pictures[3]?>' , '<?php echo $settings->user_avatar ?>','<?php echo $settings->user_login?>' )" class="btn btn-md btn-hover btn-info">Avatar</button>
+                                                    <button onclick="deletePhoto('<?php echo "./photo/".$settings->user_login."/".$pictures[3]?>')" class="btn btn-md btn-hover btn-danger">Delete</button>
+
 
                                                 <?php endif; ?>
 
@@ -348,8 +351,9 @@ $this->title = $session['loged_user'];
                                                     <?php $form3 = ActiveForm::end() ?>
                                                 <?php else: ?>
 
-                                                    <a href="#" class="btn btn-md btn-hover btn-info">Avatar</a>
-                                                    <a href="#" class="btn btn-md btn-hover btn-danger">Delete</a>
+                                                    <button onclick="toAvatar('<?php echo "./photo/".$settings->user_login."/".$pictures[4]?>' , '<?php echo $settings->user_avatar ?>','<?php echo $settings->user_login?>' )" class="btn btn-md btn-hover btn-info">Avatar</button>
+                                                    <button onclick="deletePhoto('<?php echo "./photo/".$settings->user_login."/".$pictures[4]?>')" class="btn btn-md btn-hover btn-danger">Delete</button>
+
 
                                                 <?php endif; ?>
 

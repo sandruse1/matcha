@@ -20,6 +20,8 @@ use yii\data\ActiveDataProvider;
 use yii\widgets\ListView;
 use yii\widgets\Pjax;
 
+
+
 $this->title = 'Search';
 ?>
 <?php
@@ -50,13 +52,63 @@ $onChangeJs_age= <<<JS
 JS;
 ?>
 
+<script>
+    function Make_like(loged_user, licked)
+    {
+        $.ajax({
+            url: '<?php echo Yii::$app->request->baseUrl. '/account/make_like' ?>',
+            type: 'post',
+            data: {loged_user: loged_user, licked: licked},
+            success: function (data) {
+                location.href = 'http://localhost:8080/matcha/web/search';
+            }
+        });
+    }
+
+    function Make_dislike(loged_user, licked)
+    {
+        $.ajax({
+            url: '<?php echo Yii::$app->request->baseUrl. '/account/make_dislike' ?>',
+            type: 'post',
+            data: {loged_user: loged_user, licked: licked},
+            success: function (data) {
+                location.href = 'http://localhost:8080/matcha/web/search';
+            }
+        });
+    }
+
+    function Make_block(loged_user, licked)
+    {
+        $.ajax({
+            url: '<?php echo Yii::$app->request->baseUrl. '/account/make_block' ?>',
+            type: 'post',
+            data: {loged_user: loged_user, licked: licked},
+            success: function (data) {
+                location.href = 'http://localhost:8080/matcha/web/search';
+            }
+        });
+    }
+
+    function Make_fake(loged_user, licked)
+    {
+        $.ajax({
+            url: '<?php echo Yii::$app->request->baseUrl. '/account/make_fake' ?>',
+            type: 'post',
+            data: {loged_user: loged_user, licked: licked},
+            success: function (data) {
+                location.href = 'http://localhost:8080/matcha/web/search';
+            }
+        });
+    }
+</script>  <!--LIKE DISLIKE BLOCK FAKE -->
+
 <div class="search">
     <div class="container">
 
 <!---------------SEARCH MENU---------------->
 
         <div class="row">
-            <div class="col-md-10 col-md-offset-1">
+            <div class="col-md-10 col-md-offset-1" style="width: auto">
                 <div class="form-section">
                     <div class="row">
                         <?php $form = ActiveForm::begin() ?>
@@ -150,8 +202,6 @@ JS;
                             </div>
                         </div>
 
-
-
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div id="filter-panel" class="collapse filter-panel form-group">
                                 <div class="panel panel-default ">
@@ -226,10 +276,6 @@ JS;
                         <?php $form = ActiveForm::end() ?>
                     </div>
                     <br>
-
-
-
-
                 </div>
             </div>
         </div>
@@ -238,14 +284,14 @@ JS;
         <br>
         <div class="form-group">
             <div class="col-md-10 col-md-offset-1">
-            <?php Pjax::begin();
-            echo ListView::widget([
+                <?php Pjax::begin();
+                    echo ListView::widget([
                 'dataProvider' => $dataProvider,
                 'itemOptions' => ['class' => 'item'],
                 'itemView' => 'usersprofile',
                 'pager' => ['class' => \kop\y2sp\ScrollPager::className()]
             ]);
-            Pjax::end();?>
+                Pjax::end();?>
             </div>
         </div>
 
