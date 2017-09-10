@@ -31,9 +31,17 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
             'yii\\authclient\\' => 15,
             'yii\\' => 4,
         ),
+        'r' => 
+        array (
+            'rmrevin\\yii\\fontawesome\\' => 24,
+        ),
         'p' => 
         array (
             'phpDocumentor\\Reflection\\' => 25,
+        ),
+        'm' => 
+        array (
+            'machour\\yii2\\notifications\\' => 27,
         ),
         'l' => 
         array (
@@ -150,11 +158,19 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2',
         ),
+        'rmrevin\\yii\\fontawesome\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/rmrevin/yii2-fontawesome',
+        ),
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
             1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
             2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+        ),
+        'machour\\yii2\\notifications\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/machour/yii2-notifications',
         ),
         'lysenkobv\\GeoIP\\' => 
         array (

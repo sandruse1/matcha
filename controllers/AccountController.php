@@ -10,6 +10,7 @@ namespace app\controllers;
 
 use app\models\Accountpass;
 use app\models\Accountset;
+use app\models\Notification;
 use app\models\Photo;
 use app\models\Profiledata;
 use app\models\Search;
@@ -27,10 +28,12 @@ define('EARTH_RADIUS', 6372795);
 
 class AccountController extends Controller
 {
+
     public $layout = 'user';
     public $loged_user;
 
 //    ----------MY_HELP_FUNCTIONS----------
+
 
     function cmp($a, $b) {
         if ($this->calculateTheDistance($a['user_latitude'], $a['user_longitude'],$this->loged_user->user_latitude, $this->loged_user->user_longitude) == $this->calculateTheDistance($b['user_latitude'], $b['user_longitude'],$this->loged_user->user_latitude, $this->loged_user->user_longitude)) {
@@ -209,18 +212,21 @@ class AccountController extends Controller
     }
 
     function removeOldFriend($id_1, $id_2){
+
         $user1 = Profiledata::findOne(['user_id' => $id_1]);
         $frend_array_1 = array();
+
         if ($user1->user_friend_array != NULL) {
             $frend_array_1 = unserialize($user1->user_friend_array);
+
             foreach ($frend_array_1 as $key => $friend){
+
                 if ($friend == $id_2){
-                    unset($key, $frend_array_1);
+                    unset($frend_array_1[$key]);
                 }
             }
             $user1->user_friend = $user1->user_friend - 1;
         }
-
 
         $user2 = Profiledata::findOne(['user_id' => $id_2]);
         $frend_array_2 = array();
@@ -228,10 +234,10 @@ class AccountController extends Controller
             $frend_array_2 = unserialize($user2->user_friend_array);
             foreach ($frend_array_2 as $key => $friend){
                 if ($friend == $id_1){
-                    unset($key, $frend_array_2);
+                    unset($frend_array_2[$key]);
                 }
             }
-            $user2->user_friend = $user1->user_friend - 1;
+            $user2->user_friend = $user2->user_friend - 1;
         }
 
         $user1->user_friend_array = serialize($frend_array_1);
@@ -244,11 +250,14 @@ class AccountController extends Controller
 //    ----------ACTIONS-----------------
 
     public function actionAccount(){
+
+
         $this->resetSearchData();
 
         $pictures = array();
 
         $session = Yii::$app->session;
+
         $email = $session['loged_email'];
         $settings = Accountset::findOne(['user_email' => $email]);
         $passwords = Accountpass::findOne(['user_email' => $email]);
@@ -300,7 +309,27 @@ class AccountController extends Controller
                     }
                 }
             }
-        return $this->render('account', compact( 'passwords', 'settings', 'pictures', 'photo'));
+            $friend_array = unserialize($settings->user_friend_array);
+
+        $user = Profiledata::find()->where(['user_id' => $friend_array])->asArray()->all();
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $user,
+            'pagination' => [
+                'pageSize' => 5,
+                'validatePage' => false,
+            ],
+        ]);
+
+        $noti = Notification::find()->where(['user_id' => $settings->user_id])->asArray()->all();
+        $noti_array = new ArrayDataProvider([
+            'allModels' => $noti,
+            'pagination' => [
+                'pageSize' => 5,
+                'validatePage' => false,
+            ],
+        ]);
+        $session['noti'] = $noti_array;
+        return $this->render('account', compact( 'passwords', 'settings', 'pictures', 'photo', 'dataProvider'));
     }
 
     public function actionMessage(){
@@ -317,7 +346,7 @@ class AccountController extends Controller
         if ($session['loged_email']) {
             $email = $session['loged_email'];
             $profile = Profiledata::findOne(['user_email' => $email]);
-            if ($profile->user_profile_complete = 1){
+            if ($profile->user_profile_complete == 1){
                 $session['user_avatar'] = "photo/".$profile->user_login."/avatar.jpg";
                 $this->redirect('http://localhost:8080/matcha/web/account');
             }
@@ -532,6 +561,11 @@ class AccountController extends Controller
 
     }
 
+    public function actionGetnotification(){
+
+
+    }
+
     public function actionDeletephoto(){
 
         $reqes = Yii::$app->request->post();
@@ -557,9 +591,6 @@ class AccountController extends Controller
         rename(Yii::$app->basePath.'/web/'.$srcfromavatar, Yii::$app->basePath.'/web/photo/'.$login."/".date("j_n_y_g_i_s").".".$type);
         rename(Yii::$app->basePath.'/web'.substr($srctoavatar,1 ), Yii::$app->basePath.'/web/photo/'.$login."/avatar.".$type1);
     }
-
-
-
 
     public function actionMake_like(){
         $reqes = Yii::$app->request->post();
@@ -611,8 +642,7 @@ class AccountController extends Controller
 
     public function actionMake_dislike(){
         $reqes = Yii::$app->request->post();
-//var_dump($reqes);
-//die();
+
         $user = Profiledata::findOne(['user_login' => $reqes['loged_user']]);
 
         $loged_user_id = $user->user_id;
@@ -637,12 +667,12 @@ class AccountController extends Controller
             $user_user->save();
 
         } else {
-
             $id_min = $liked_id;
             $id_max = $loged_user_id;
 
-            if (User_user::findOne(['user_id_min' => $id_min, 'user_id_max' => $id_max])) {
-                $user_user = User_user::findOne(['user_id_min' => $id_min, 'user_id_max' => $id_max]);
+            if (User_user::find(['user_id_min' => $id_min, 'user_id_max' => $id_max])->one()) {
+                $user_user = User_user::find(['user_id_min' => $id_min, 'user_id_max' => $id_max])->one();
+
                 $flag = ($user_user->user_user_min == "like" && $user_user->user_user_max == "like") ? 0 : 1 ;
             } else {
                 $flag = 0;
@@ -656,7 +686,6 @@ class AccountController extends Controller
         if ( $flag){
             $this->removeOldFriend($id_max, $id_min);
         }
-
     }
 
     public function actionMake_block(){

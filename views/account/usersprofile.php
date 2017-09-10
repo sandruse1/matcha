@@ -76,10 +76,10 @@ $session = Yii::$app->session;
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" onclick="Make_like('<?php echo $session['loged_user']. $model['user_id']?>')" class="btn btn-success btn-sm">Like</button>
-                        <button type="button" onclick="Make_dislike('<?php echo $session['loged_user']?>, <?php $model['user_id']?>')" class="btn btn-danger btn-sm">Dislike</button>
-                        <button type="button" onclick="Make_block('<?php echo $session['loged_user']?>, <?php $model['user_id']?>')" class="btn btn-warning btn-sm">Block</button>
-                        <button type="button" onclick="Make_fake('<?php echo $session['loged_user']?>, <?php $model['user_id']?>')" class="btn btn-sm">Fake</button>
+                        <button type="button" onclick="Make_like('<?php echo $session['loged_user']?>','<?php echo $model['user_id']?>')" class="btn btn-success btn-sm">Like</button>
+                        <button type="button" onclick="Make_dislike('<?php echo $session['loged_user']?>','<?php echo $model['user_id']?>')" class="btn btn-danger btn-sm">Dislike</button>
+                        <button type="button" onclick="Make_block('<?php echo $session['loged_user']?>','<?php echo $model['user_id']?>')" class="btn btn-warning btn-sm">Block</button>
+                        <button type="button" onclick="Make_fake('<?php echo $session['loged_user']?>','<?php echo $model['user_id']?>')" class="btn btn-sm">Fake</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>

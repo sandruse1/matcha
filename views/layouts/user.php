@@ -11,7 +11,10 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AccountAsset;
-
+use yii\widgets\Pjax;
+use yii\widgets\ListView;
+use app\controllers\AccountController;
+use yii\data\ActiveDataProvider;
 AccountAsset::register($this);
 
 ?>
@@ -65,6 +68,28 @@ AccountAsset::register($this);
             ]); ?>
         <?php endif; ?>
     <?php if ($this->title != 'Profile data'): ?>
+
+<!--        <script>-->
+<!--            $(document).ready(function() {-->
+<!--                setInterval(function(){-->
+<!--                    $('#hidea').trigger('click');-->
+<!--                }, 10000);-->
+<!--            });-->
+<!--        </script>-->
+
+
+
+
+
+            <?= Html::a("<i class=\"fa fa-bell-o fa-2x\"></i>
+        <span class=\"label label-warning notifications-icon-count\">0</span>",
+                ['account/account'], ['class' => '', 'data-toggle' => '']) ?>
+
+
+
+
+
+
        <?php echo Nav::widget([
             'options' => ['class' => 'navbar-nav navbar-right'],
             'items' => [
@@ -75,14 +100,20 @@ AccountAsset::register($this);
             ],
             'encodeLabels' => false,
         ]); ?>
+<!--------------------------->
+
     <?php endif; ?>
+<!------------------------------------->
+
         <?php NavBar::end(); ?>
         <div class="container">
+
             <?= Breadcrumbs::widget([
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
             ]) ?>
             <?= $content ?>
         </div>
+
     </div>
     </div>
     <footer class="footer">

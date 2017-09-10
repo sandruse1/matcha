@@ -12,6 +12,8 @@ use yii\bootstrap\ActiveForm;
 use yii\authclient\widgets\AuthChoice;
 use yii\jui\DatePicker;
 use yii\widgets\LinkPager;
+use yii\widgets\Pjax;
+use yii\widgets\ListView;
 
 $session = Yii::$app->session;
 $session->open();
@@ -177,39 +179,16 @@ $this->title = $session['loged_user'];
                             <div id="menu1" class="tab-pane fade">
 
                                 <div class="friend-list">
-                                    <div class="media">
-                                        <a href="#">
-                                            <div class="media-left">
-                                                <img src="https://media.licdn.com/mpr/mpr/shrink_100_100/AAEAAQAAAAAAAAZhAAAAJGE3YjFiNGMwLWQ1NzQtNDY0ZS04ZjI2LWNjM2IwMGExNTQxNw.jpg" class="media-object" style="width:60px">
-                                            </div>
-                                            <div class="media-body">
-                                                <h4 class="media-heading">Santosh Singh</h4>
-                                                <p>UI  Developer</p>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="media">
-                                        <a href="#">
-                                            <div class="media-left">
-                                                <img src="https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAzoAAAAJGM2OWJjMGEzLTQ3ZjItNDYzMy1hMDJkLTZkODc0NDI0YWZlNQ.jpg" class="media-object" style="width:60px">
-                                            </div>
-                                            <div class="media-body">
-                                                <h4 class="media-heading">Sagar Saini</h4>
-                                                <p>UI  Developer</p>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="media">
-                                        <a href="#">
-                                            <div class="media-left">
-                                                <img src="https://lh6.googleusercontent.com/-FQt6RptkvQI/AAAAAAAAAAI/AAAAAAAAAAA/RS9O9VEXTXc/s128-c-k/photo.jpg" class="media-object" style="width:60px">
-                                            </div>
-                                            <div class="media-body">
-                                                <h4 class="media-heading">Prakhar Mathur</h4>
-                                                <p>UI Developer</p>
-                                            </div>
-                                        </a>
-                                    </div>
+
+                                            <?php Pjax::begin();
+                                            echo ListView::widget([
+                                                'dataProvider' => $dataProvider,
+                                                'itemOptions' => ['class' => 'item'],
+                                                'itemView' => 'notification',
+                                                'pager' => ['class' => \kop\y2sp\ScrollPager::className()]
+                                            ]);
+                                            Pjax::end();?>
+
                                 </div>
                             </div>
                             <div id="menu2" class="tab-pane fade">

@@ -72,7 +72,7 @@ JS;
             type: 'post',
             data: {loged_user: loged_user, licked: licked},
             success: function (data) {
-                location.href = 'http://localhost:8080/matcha/web/search';
+                alert(data);
             }
         });
     }

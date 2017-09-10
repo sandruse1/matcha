@@ -10,6 +10,21 @@ $config = [
     'language' => 'en',
 //    'layout' => 'basic',
     'modules' => [
+        'notifications' => [
+            'class' => 'machour\yii2\notifications\NotificationsModule',
+            // Point this to your own Notification class
+            // See the "Declaring your notifications" section below
+            'notificationClass' => 'app\models\Notification',
+            // Allow to have notification with same (user_id, key, key_id)
+            // Default to FALSE
+            'allowDuplicate' => false,
+            // Allow custom date formatting in database
+            'dbDateFormat' => 'Y-m-d H:i:s',
+            // This callable should return your logged in user Id
+            'userId' => function() {
+                return \Yii::$app->user->id;
+            }
+        ],
         'redactor' => 'yii\redactor\RedactorModule',
         'class' => 'yii\redactor\RedactorModule',
         'uploadDir' => '@webroot/uploads',

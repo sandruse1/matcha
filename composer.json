@@ -29,7 +29,7 @@
         "kossmoss/yii2-google-maps-api": "^0.2",
         "yii-dream-team/yii2-upload-behavior": "*",
         "kartik-v/yii2-slider": "dev-master",
-        "kop/yii2-scroll-pager": "dev-master"
+        "kop/yii2-scroll-pager": "dev-master",
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
