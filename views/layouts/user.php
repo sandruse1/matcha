@@ -162,7 +162,7 @@ AccountAsset::register($this);
                     <i class="fa fa-bell-o fa-2x"></i>
                     <span id="not_count" class="label label-warning notifications-icon-count">0</span>
                 </button>
-                <div id="div_not" class="hide form-group">
+                <div id="div_not" class="hide form-group" style="background-color: whitesmoke">
 
 
                     <p id="test"></p>
