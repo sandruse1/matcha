@@ -32,7 +32,7 @@ $session = Yii::$app->session;
                 <p><span style="background: rgb(255,51, 51); border-radius: 50%; display: inline-block; height: 9px; margin-left: 4px; margin-bottom: 2px; width: 9px;"></span> last seen <?php echo $model['last_online']; ?> </p>
             <?php endif;?>
 
-        <small><cite title="Source Title"><?php echo $model['user_country'].", ".$model['user_city']?> <i class="glyphicon glyphicon-map-marker"></i></cite></small>
+        <small><cite title="Source Title"><?php echo $model['user_country'].", ".$model['user_city']?> <i class="glyphicon glyphicon-map-marker"></i></cite> | Rating : <?php echo $model['user_rating']; ?></small>
     </blockquote>
     <button type="button" onclick="Make_like('<?php echo $session['loged_user']?>','<?php echo $model['user_id']?>')" class="btn btn-success btn-sm">Like</button>
     <button type="button" onclick="Make_dislike('<?php echo $session['loged_user']?>','<?php echo $model['user_id']?>')" class="btn btn-danger btn-sm">Dislike</button>

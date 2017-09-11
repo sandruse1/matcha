@@ -114,7 +114,7 @@ $this->title = $session['loged_user'];
                     <div class="text-information">
                         <h2 class="main-name"><?php echo $settings->user_name." ".$settings->user_secondname ?></h2>
                         <h5 class="email-info"><?php echo $settings->user_country.", ".$settings->user_city?></h5>
-
+                        <h5 class="email-info">Rating : <?php echo $settings->user_rating?></h5>
                     </div>
                     <div class="tab-section">
                         <ul class="nav nav-tabs">

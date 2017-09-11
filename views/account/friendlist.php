@@ -27,7 +27,7 @@ $session = Yii::$app->session;
             <?php else: ?>
                 <p><span style="background: rgb(255,51, 51); border-radius: 50%; display: inline-block; height: 9px; margin-left: 4px; margin-bottom: 2px; width: 9px;"></span> last seen <?php echo $model['last_online']; ?> </p>
             <?php endif;?>
-            <p><?php echo $model['user_country'].", ".$model['user_city']?>, Age : <?php echo $model['user_age']?></p>
+            <p><?php echo $model['user_country'].", ".$model['user_city']?>, Age : <?php echo $model['user_age']?> | Rating : <?php echo $model['user_rating']?></p>
             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal"> View </button>
             <button type="button" onclick="" class="btn btn-sm">Chat</button>
         </div>
