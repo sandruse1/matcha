@@ -34,7 +34,6 @@ class AccountController extends Controller
 
 //    ----------MY_HELP_FUNCTIONS----------
 
-
     function cmp($a, $b) {
         if ($this->calculateTheDistance($a['user_latitude'], $a['user_longitude'],$this->loged_user->user_latitude, $this->loged_user->user_longitude) == $this->calculateTheDistance($b['user_latitude'], $b['user_longitude'],$this->loged_user->user_latitude, $this->loged_user->user_longitude)) {
             return 0;
@@ -188,6 +187,8 @@ class AccountController extends Controller
     }
 
     function addNewFriend($id_1, $id_2){
+
+
         $user1 = Profiledata::findOne(['user_id' => $id_1]);
         $frend_array_1 = array();
         if ($user1->user_friend_array != NULL) {
@@ -211,6 +212,32 @@ class AccountController extends Controller
 
     }
 
+    function addNewNotification($user_id, $text){
+
+        if (Notification::findOne(['user_id' => $user_id])) {
+            $user1 = Notification::findOne(['user_id' => $user_id]);
+        } else {
+            $user1 = new Notification();
+            $user1->user_id = $user_id;
+        }
+        $notification_array_1 = array();
+        $time_array = array();
+        if ($user1->user_notification_list != NULL) {
+            $notification_array_1 = unserialize($user1->user_notification_list);
+            $time_array = unserialize($user1->user_notification_time_list);
+        }
+        $notification_array_1[] = $text;
+        $time_array[] = date("d.m.y G:i:s");
+
+        $user1->user_notification_list = serialize($notification_array_1);
+        $user1->count = count($notification_array_1);
+        $user1->user_notification_time_list = serialize($time_array);
+
+        $user1->save();
+
+
+    }
+
     function removeOldFriend($id_1, $id_2){
 
         $user1 = Profiledata::findOne(['user_id' => $id_1]);
@@ -226,6 +253,7 @@ class AccountController extends Controller
                 }
             }
             $user1->user_friend = $user1->user_friend - 1;
+
         }
 
         $user2 = Profiledata::findOne(['user_id' => $id_2]);
@@ -245,6 +273,20 @@ class AccountController extends Controller
         $user1->save();
         $user2->save();
 
+    }
+
+    function countRating($user_id, $pl_min){
+        $user = Profiledata::findOne(['user_id' => $user_id]);
+        if ($pl_min == "+"){
+            $user->user_positive_vote = $user->user_positive_vote + 1 ;
+        } else {
+            $user->user_negative_vote = $user->user_negative_vote + 1 ;
+        }
+        $user_votes = $user->user_positive_vote + $user->user_negative_vote;
+        $before_dot = ($user->user_positive_vote / $user_votes) * 10;
+        $after_dot = ($user->user_positive_vote % $user_votes) * 10;
+        $user->user_rating = $before_dot.".".$after_dot;
+        $user->save();
     }
 
 //    ----------ACTIONS-----------------
@@ -353,7 +395,9 @@ class AccountController extends Controller
             FileHelper::createDirectory("./photo/".$profile->user_login);
             $profile->facebook = ($profile['user_facebook_id'] == NULL && $profile['user_google_id'] == NULL) ?  0  : 1;
             if ($profile->load(Yii::$app->request->post())) {
+
                 $post = Yii::$app->request->post('Profiledata');
+
                 if ($profile->validate()) {
                     $profile->user_name = $post['user_name'];
                     $profile->user_secondname = $post['user_secondname'];
@@ -368,15 +412,22 @@ class AccountController extends Controller
                         $session['user_avatar'] = $profile->user_avatar;
                     }
 
-                    else{
-                        if ($profile->user_facebook_id){
+                    elseif ($profile->user_facebook_id){
                             file_put_contents('photo/' . $profile->user_login . "/avatar.jpg", file_get_contents("http://graph.facebook.com/".$profile->user_facebook_id."/picture?type=large"));
-
-                        }else{
-                            file_put_contents('photo/' . $profile->user_login . "/avatar.jpg", file_get_contents(str_replace('sz=50', 'sz=750', $profile->user_avatar)));
-                        }
-                        $session['user_avatar'] = "photo/".$profile->user_login."/avatar.jpg";
                         $profile->user_avatar = 'photo/' . $profile->user_login . "/avatar.jpg";
+                        $session['user_avatar'] = $profile->user_avatar;
+                        }elseif ($profile->user_google_id){
+                            file_put_contents('photo/' . $profile->user_login . "/avatar.jpg", file_get_contents(str_replace('sz=50', 'sz=750', $profile->user_avatar)));
+                        $profile->user_avatar = 'photo/' . $profile->user_login . "/avatar.jpg";
+                        $session['user_avatar'] = $profile->user_avatar;
+                        }
+                        else {
+//                            file_put_contents('photo/' . $profile->user_login . "/avatar.jpg", file_get_contents('https://upload.wikimedia.org/wikipedia/commons/3/37/No_person.jpg'));
+                            $profile->user_avatar = 'https://upload.wikimedia.org/wikipedia/commons/3/37/No_person.jpg';
+                            $session['user_avatar'] = $profile->user_avatar;
+                        }
+
+
                     }
                     $profile->user_day_of_birth = $post['user_day_of_birth'];
 
@@ -392,10 +443,10 @@ class AccountController extends Controller
 
                     $this->redirect('http://localhost:8080/matcha/web/account');
 
-                } else {
+            } else {
                     Yii::$app->session->setFlash('error', 'Please fill in all the fields correctly');
                 }
-            }
+
             $session->close();
             return $this->render('profiledata', compact('profile'));
         }else {
@@ -561,9 +612,66 @@ class AccountController extends Controller
 
     }
 
+    public function actionGetnotcount()
+    {
+
+        $session = Yii::$app->session;
+
+        $email = $session['loged_email'];
+
+        $user = Profiledata::findOne(['user_email' => $email]);
+        if (Notification::findOne(['user_id' => $user->user_id])){
+            $user_noti = Notification::findOne(['user_id' => $user->user_id]);
+            echo $user_noti->count;
+        } else {
+            echo 0;
+        }
+
+    }
+
+    public function actionSetonlain()
+    {
+        $session = Yii::$app->session;
+        $email = $session['loged_email'];
+        $user = Profiledata::findOne(['user_email' => $email]);
+
+        $user->user_online = "onlain";
+        $user->last_online = date("d.m.y G:i");
+        $user->save();
+    }
+
     public function actionGetnotification(){
+        $session = Yii::$app->session;
 
+        $email = $session['loged_email'];
 
+        $user = Profiledata::findOne(['user_email' => $email]);
+        if (Notification::findOne(['user_id' => $user->user_id])){
+            $user_noti = Notification::find()->where(['user_id' => $user->user_id])->asArray()->one();
+            $notification = array();
+            $user_notification_list = unserialize($user_noti['user_notification_list']) ;
+            $user_notification_time_list = unserialize($user_noti['user_notification_time_list']);
+
+            foreach ($user_notification_list as $key => $noti){
+                $notification[] = $noti." ".$user_notification_time_list[$key];
+            }
+            echo json_encode($notification);
+        } else {
+            echo 0;
+        }
+
+    }
+
+    public function actionDeletenotification(){
+        $session = Yii::$app->session;
+
+        $email = $session['loged_email'];
+
+        $user = Profiledata::findOne(['user_email' => $email]);
+        if (Notification::findOne(['user_id' => $user->user_id])){
+            $user_noti = Notification::findOne(['user_id' => $user->user_id]);
+            $user_noti->delete();
+        }
     }
 
     public function actionDeletephoto(){
@@ -575,67 +683,75 @@ class AccountController extends Controller
     }
 
     public function actionSetasavatar(){
-
+//        https://upload.wikimedia.org/wikipedia/commons/3/37/No_person.jpg
+//        $profile->user_avatar = 'photo/' . $profile->user_login . "/avatar.jpg";
         $reqes = Yii::$app->request->post();
 
         $srctoavatar = $reqes['srctoavatar'];
         $srcfromavatar = $reqes['srcfromavatar'];
-        $login = $reqes['login'];
+        if ($srcfromavatar == "https://upload.wikimedia.org/wikipedia/commons/3/37/No_person.jpg"){
+            $login = $reqes['login'];
 
-        $type = explode('.', $srcfromavatar);
-        $type = $type[1];
+            $type1 = explode('.', substr($srctoavatar, 1));
+            $type1 = $type1[1];
 
-        $type1 = explode('.', substr($srctoavatar,1 ));
-        $type1 = $type1[1];
+            rename(Yii::$app->basePath . '/web' . substr($srctoavatar, 1), Yii::$app->basePath . '/web/photo/' . $login . "/avatar." . $type1);
+            $user = Profiledata::findOne(['user_login' => $login]);
+            $user->user_avatar = 'photo/' . $login . "/avatar.jpg";
+            $user->save();
+        }else {
+            $login = $reqes['login'];
 
-        rename(Yii::$app->basePath.'/web/'.$srcfromavatar, Yii::$app->basePath.'/web/photo/'.$login."/".date("j_n_y_g_i_s").".".$type);
-        rename(Yii::$app->basePath.'/web'.substr($srctoavatar,1 ), Yii::$app->basePath.'/web/photo/'.$login."/avatar.".$type1);
+            $type = explode('.', $srcfromavatar);
+            $type = $type[1];
+
+            $type1 = explode('.', substr($srctoavatar, 1));
+            $type1 = $type1[1];
+
+            rename(Yii::$app->basePath . '/web/' . $srcfromavatar, Yii::$app->basePath . '/web/photo/' . $login . "/" . date("j_n_y_g_i_s") . "." . $type);
+            rename(Yii::$app->basePath . '/web' . substr($srctoavatar, 1), Yii::$app->basePath . '/web/photo/' . $login . "/avatar." . $type1);
+        }
     }
 
     public function actionMake_like(){
         $reqes = Yii::$app->request->post();
 
         $user = Profiledata::findOne(['user_login' => $reqes['loged_user']]);
-
+        $user_liked = Profiledata::findOne(['user_id' => $reqes['licked']]);
         $loged_user_id = $user->user_id;
         $liked_id = $reqes['licked'];
+        $this->addNewNotification($liked_id, $user->user_login." like you at");
 
-        if ($loged_user_id < $liked_id){
-            $id_max = $liked_id;
-            $id_min = $loged_user_id;
+        $id_max = ($loged_user_id < $liked_id) ? $liked_id :$loged_user_id;
+        $id_min = ($loged_user_id < $liked_id) ? $loged_user_id :$liked_id;
 
-            if (User_user::findOne(['user_id_min' => $id_min, 'user_id_max' => $id_max])) {
-                $user_user = User_user::findOne(['user_id_min' => $id_min, 'user_id_max' => $id_max]);
-                $flag = ($user_user->user_user_min == "like" && $user_user->user_user_max == "like") ? 0: 1 ;
-
-            } else {
-                $flag = 1;
-                $user_user = new User_user();
-                $user_user->user_id_min = $id_min;
-                $user_user->user_id_max = $id_max;
-            }
-
-            $user_user->user_user_min = "like";
-            $user_user->save();
-
+        if (User_user::findOne(['user_id_min' => $id_min, 'user_id_max' => $id_max])) {
+            $user_user = User_user::findOne(['user_id_min' => $id_min, 'user_id_max' => $id_max]);
+            $flag = ($user_user->user_user_min == "like" && $user_user->user_user_max == "like") ? 0: 1 ;
         } else {
+            $flag = 1;
+            $this->countRating($liked_id, "+");
+            $user_user = new User_user();
+            $user_user->user_id_min = $id_min;
+            $user_user->user_id_max = $id_max;
+        }
 
-            $id_min = $liked_id;
-            $id_max = $loged_user_id;
-
-            if (User_user::findOne(['user_id_min' => $id_min, 'user_id_max' => $id_max])) {
-                $user_user = User_user::findOne(['user_id_min' => $id_min, 'user_id_max' => $id_max]);
-                $flag = ($user_user->user_user_min == "like" && $user_user->user_user_max == "like") ? 1 : 0 ;
-            } else {
-                $flag = 1;
-                $user_user = new User_user();
-                $user_user->user_id_min = $id_min;
-                $user_user->user_id_max = $id_max;
+        if ($loged_user_id < $liked_id) {
+            if ($user_user->user_user_max != "like"){
+                $this->countRating($liked_id, "+");
             }
             $user_user->user_user_max = "like";
-            $user_user->save();
+        }else {
+            if ($user_user->user_user_min != "like"){
+                $this->countRating($liked_id, "+");
+            }
+            $user_user->user_user_min = "like";
         }
+        $user_user->save();
+
         if ($user_user->user_user_min == "like" && $user_user->user_user_max == "like" && $flag){
+            $this->addNewNotification($liked_id, $user->user_login." become your new friend at");
+            $this->addNewNotification($loged_user_id, $user_liked->user_login." become your new friend at");
             $this->addNewFriend($id_max, $id_min);
         }
     }
@@ -644,46 +760,41 @@ class AccountController extends Controller
         $reqes = Yii::$app->request->post();
 
         $user = Profiledata::findOne(['user_login' => $reqes['loged_user']]);
-
+        $user_liked = Profiledata::findOne(['user_id' => $reqes['licked']]);
         $loged_user_id = $user->user_id;
         $liked_id = $reqes['licked'];
+        $this->addNewNotification($liked_id, $user->user_login." dislike you at");
 
-        if ($loged_user_id < $liked_id){
-            $id_max = $liked_id;
-            $id_min = $loged_user_id;
+        $id_max = ($loged_user_id < $liked_id) ? $liked_id :$loged_user_id;
+        $id_min = ($loged_user_id < $liked_id) ? $loged_user_id :$liked_id;
 
-            if (User_user::findOne(['user_id_min' => $id_min, 'user_id_max' => $id_max])) {
-                $user_user = User_user::findOne(['user_id_min' => $id_min, 'user_id_max' => $id_max]);
-                $flag = ($user_user->user_user_min == "like" && $user_user->user_user_max == "like") ? 1: 0 ;
-
-            } else {
-                $flag = 0;
-                $user_user = new User_user();
-                $user_user->user_id_min = $id_min;
-                $user_user->user_id_max = $id_max;
-            }
-
-            $user_user->user_user_min = "dislike";
-            $user_user->save();
-
+        if (User_user::findOne(['user_id_min' => $id_min, 'user_id_max' => $id_max])) {
+            $user_user = User_user::findOne(['user_id_min' => $id_min, 'user_id_max' => $id_max]);
+            $flag = ($user_user->user_user_min == "like" && $user_user->user_user_max == "like") ? 1: 0 ;
         } else {
-            $id_min = $liked_id;
-            $id_max = $loged_user_id;
+            $flag = 0;
+            $user_user = new User_user();
+            $user_user->user_id_min = $id_min;
+            $user_user->user_id_max = $id_max;
+        }
 
-            if (User_user::find(['user_id_min' => $id_min, 'user_id_max' => $id_max])->one()) {
-                $user_user = User_user::find(['user_id_min' => $id_min, 'user_id_max' => $id_max])->one();
-
-                $flag = ($user_user->user_user_min == "like" && $user_user->user_user_max == "like") ? 0 : 1 ;
-            } else {
-                $flag = 0;
-                $user_user = new User_user();
-                $user_user->user_id_min = $id_min;
-                $user_user->user_id_max = $id_max;
+        if ($loged_user_id < $liked_id) {
+            if ($user_user->user_user_max != "dislike"){
+                $this->countRating($liked_id, "-");
             }
             $user_user->user_user_max = "dislike";
-            $user_user->save();
+        }else {
+            if ($user_user->user_user_min != "dislike"){
+                $this->countRating($liked_id, "-");
+            }
+            $user_user->user_user_min = "dislike";
         }
-        if ( $flag){
+
+        $user_user->save();
+
+        if ($flag){
+            $this->addNewNotification($liked_id, $user->user_login."not your friend from");
+            $this->addNewNotification($loged_user_id, $user_liked->user_login."not your friend from");
             $this->removeOldFriend($id_max, $id_min);
         }
     }
@@ -769,4 +880,5 @@ class AccountController extends Controller
         }
 
     }
+
 }

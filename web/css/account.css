@@ -670,3 +670,13 @@ body {
 .help-div{
     height: auto;
 }
+
+#notia{
+    z-index: 2000;
+}
+
+#mysuperdiv {
+    position: absolute;
+    left: 0;
+    z-index: 10;
+}

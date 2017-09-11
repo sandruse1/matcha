@@ -44,8 +44,8 @@ AccountAsset::register($this);
     <div class="wrap">
     <?php $session = Yii::$app->session; ?>
     <?php $session->open();?>
-    <?php $loged_user = $session['loged_user'] ?>
-    <?php $user_avatar = $session['user_avatar'] ?>
+    <?php $loged_user = $session['loged_user']; ?>
+    <?php $user_avatar = $session['user_avatar']; ?>
     <div class="wrap">
 <?php if ($this->title != 'Profile data'): ?>
         <?php
@@ -69,27 +69,6 @@ AccountAsset::register($this);
         <?php endif; ?>
     <?php if ($this->title != 'Profile data'): ?>
 
-<!--        <script>-->
-<!--            $(document).ready(function() {-->
-<!--                setInterval(function(){-->
-<!--                    $('#hidea').trigger('click');-->
-<!--                }, 10000);-->
-<!--            });-->
-<!--        </script>-->
-
-
-
-
-
-            <?= Html::a("<i class=\"fa fa-bell-o fa-2x\"></i>
-        <span class=\"label label-warning notifications-icon-count\">0</span>",
-                ['account/account'], ['class' => '', 'data-toggle' => '']) ?>
-
-
-
-
-
-
        <?php echo Nav::widget([
             'options' => ['class' => 'navbar-nav navbar-right'],
             'items' => [
@@ -111,6 +90,87 @@ AccountAsset::register($this);
             <?= Breadcrumbs::widget([
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
             ]) ?>
+
+            <script>
+                $(document).ready(function() {
+
+                    $(window).click(function(){
+                        $.ajax({
+                            url: '<?php echo Yii::$app->request->baseUrl . '/account/setonlain' ?>',
+                            type: 'post',
+                            data: {},
+                            success: function (data) {
+                            }
+                        });
+                    });
+
+                    setInterval(function(){
+                        $.ajax({
+                            url: '<?php echo Yii::$app->request->baseUrl . '/account/getnotcount' ?>',
+                            type: 'post',
+                            data: {},
+                            success: function (data) {
+                                $("#not_count").text(data);
+                            }
+                        });
+                    }, 2000);
+
+
+                    function deleteNoti(){
+                        $.ajax({
+                            url: '<?php echo Yii::$app->request->baseUrl . '/account/deletenotification' ?>',
+                            type: 'post',
+                            data: {},
+                            success: function (data) {
+
+                            }
+                        });
+                    }
+
+
+                    $("#buton_not").on("click", function () {
+                        $.ajax({
+                            url: '<?php echo Yii::$app->request->baseUrl . '/account/getnotification' ?>',
+                            type: 'post',
+                            dataType: 'json',
+                            data: {},
+                            success: function (data) {
+                                $("div#div_not").empty();
+                                if (data != 0) {
+
+                                    deleteNoti();
+                                    data.forEach(function (value, index) {
+                                        $(`<p>${value}</p>`).appendTo($('#div_not'));
+                                    });
+                                }
+
+                                if ($("#div_not").hasClass("hide")) {
+                                    $("#div_not").removeClass("hide")
+                                } else {
+                                    $("#div_not").addClass("hide")
+                                }
+                            }
+                        });
+                    });
+                });
+            </script>
+            <?php if ($this->title != 'Profile data'): ?>
+
+                <div id="mysuperdiv" class="form-group" style="margin-top: 10%">
+
+                <button id="buton_not">
+                    <i class="fa fa-bell-o fa-2x"></i>
+                    <span id="not_count" class="label label-warning notifications-icon-count">0</span>
+                </button>
+                <div id="div_not" class="hide form-group">
+
+
+                    <p id="test"></p>
+                </div>
+            </div>
+            <?php endif; ?>
+
+
             <?= $content ?>
         </div>
 

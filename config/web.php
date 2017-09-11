@@ -8,6 +8,7 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'language' => 'en',
+    'timeZone' => 'Europe/Kiev',
 //    'layout' => 'basic',
     'modules' => [
         'notifications' => [

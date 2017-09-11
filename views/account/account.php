@@ -184,7 +184,7 @@ $this->title = $session['loged_user'];
                                             echo ListView::widget([
                                                 'dataProvider' => $dataProvider,
                                                 'itemOptions' => ['class' => 'item'],
-                                                'itemView' => 'notification',
+                                                'itemView' => 'friendlist',
                                                 'pager' => ['class' => \kop\y2sp\ScrollPager::className()]
                                             ]);
                                             Pjax::end();?>

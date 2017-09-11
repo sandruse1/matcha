@@ -11,13 +11,22 @@ use yii\helpers\HtmlPurifier;
 $session = Yii::$app->session;
 ?>
 
-<div class="media">
+<div class="media well well-sm">
 <div class="form-group">
         <div class="media-left">
             <img src="<?php echo $model['user_avatar']?>" class="media-object" style="width:60px">
         </div>
         <div class="media-body">
-            <h4 class="media-heading"><?php echo $model['user_login'] ?> (<?php echo $model['user_name']." ".$model['user_secondname']?>)</h4>
+            <h4 class="media-heading"><?php echo $model['user_login'] ?></h4>
+           <?php $date_now =  date_create('now',new DateTimeZone('Europe/Kiev'));
+            $date_online = date_create_from_format("d.m.y G:i", $model['last_online']);
+            $diff = date_diff($date_now, $date_online);
+            ?>
+            <?php if ($diff->format('%i%d%D%M%Y') < 150000000) : ?>
+                <p><span style="background: rgb(66, 183, 42); border-radius: 50%; display: inline-block; height: 9px; margin-left: 4px; margin-bottom: 2px; width: 9px;"></span> Online</p>
+            <?php else: ?>
+                <p><span style="background: rgb(255,51, 51); border-radius: 50%; display: inline-block; height: 9px; margin-left: 4px; margin-bottom: 2px; width: 9px;"></span> last seen <?php echo $model['last_online']; ?> </p>
+            <?php endif;?>
             <p><?php echo $model['user_country'].", ".$model['user_city']?>, Age : <?php echo $model['user_age']?></p>
             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal"> View </button>
             <button type="button" onclick="" class="btn btn-sm">Chat</button>
@@ -41,6 +50,16 @@ $session = Yii::$app->session;
                         </div>
                         <div class="rela-block profile-name-container">
                             <div class="rela-block user-name" id="user_name"><?php echo $model['user_name']." ".$model['user_secondname']?></div>
+                            <div class="rela-block user-name" id="user_description"><?php
+                                $date_now =  date_create('now',new DateTimeZone('Europe/Kiev'));
+                                $date_online = date_create_from_format("d.m.y G:i", $model['last_online']);
+                                $diff = date_diff($date_now, $date_online);
+                                if ($diff->format('%i%d%D%M%Y') < 150000000) : ?>
+                                    <p><span style="background: rgb(66, 183, 42); border-radius: 50%; display: inline-block; height: 9px; margin-left: 4px; margin-bottom: 2px; width: 9px;"></span> Online</p>
+                                <?php else: ?>
+                                    <p><span style="background: rgb(255,51, 51); border-radius: 50%; display: inline-block; height: 9px; margin-left: 4px; margin-bottom: 2px; width: 9px;"></span> last seen <?php echo $model['last_online']; ?> </p>
+                                <?php endif;?>
+                            </div>
                             <div class="rela-block user-desc" id="user_description"><?php echo $model['user_country'].", ".$model['user_city']?></div>
                         </div>
                         <div class="rela-block profile-card-stats">

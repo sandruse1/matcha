@@ -116,9 +116,13 @@ class SiteController extends Controller
           `user_email` VARCHAR (100) NOT NULL,
           `user_login` VARCHAR (20) ,
           `user_age` INT (3),
-          `user_rating` INT (3) DEFAULT \'5\',
+          `user_positive_vote` INT (15) DEFAULT \'0\',
+          `user_negative_vote` INT (15) DEFAULT \'0\',
+          `user_rating` INT (3) DEFAULT \'0\',
           `user_avatar` VARCHAR (255),
           `user_day_of_birth` VARCHAR (15),
+          `user_online` VARCHAR (20),
+          `last_online` VARCHAR (30),
           `user_phone` VARCHAR (20),
           `user_photo` VARCHAR (1000),
           `user_facebook_id` BIGINT (30) UNSIGNED,
@@ -175,6 +179,7 @@ class SiteController extends Controller
           `user_id` INT (11) NOT NULL,
           `user_notification_list` VARCHAR (10000),
           `user_notification_time_list` VARCHAR (10000),
+          `count` INT (11),
            PRIMARY KEY (`user_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8
         ');
         $user_notification_table->query();

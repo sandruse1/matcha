@@ -17,7 +17,22 @@ $session = Yii::$app->session;
     <br>
     <img style="width: 300px; height: 300px" src="<?php echo $model['user_avatar']?>" alt="" class="img-responsive img-rounded" />
     <blockquote>
-        <p><?php echo $model['user_name']." ".$model['user_secondname']?></p> <small><cite title="Source Title"><?php echo $model['user_country'].", ".$model['user_city']?> <i class="glyphicon glyphicon-map-marker"></i></cite></small>
+        <p><?php
+            echo $model['user_name']." ".$model['user_secondname'];
+            $date_now =  date_create('now',new DateTimeZone('Europe/Kiev'));
+            $date_online = date_create_from_format("d.m.y G:i", $model['last_online']);
+            $diff = date_diff($date_now, $date_online);
+
+            ?></p>
+
+
+            <?php if ($diff->format('%i%d%D%M%Y') < 150000000) : ?>
+                <p><span style="background: rgb(66, 183, 42); border-radius: 50%; display: inline-block; height: 9px; margin-left: 4px; margin-bottom: 2px; width: 9px;"></span> Online</p>
+            <?php else: ?>
+                <p><span style="background: rgb(255,51, 51); border-radius: 50%; display: inline-block; height: 9px; margin-left: 4px; margin-bottom: 2px; width: 9px;"></span> last seen <?php echo $model['last_online']; ?> </p>
+            <?php endif;?>
+
+        <small><cite title="Source Title"><?php echo $model['user_country'].", ".$model['user_city']?> <i class="glyphicon glyphicon-map-marker"></i></cite></small>
     </blockquote>
     <button type="button" onclick="Make_like('<?php echo $session['loged_user']?>','<?php echo $model['user_id']?>')" class="btn btn-success btn-sm">Like</button>
     <button type="button" onclick="Make_dislike('<?php echo $session['loged_user']?>','<?php echo $model['user_id']?>')" class="btn btn-danger btn-sm">Dislike</button>
@@ -25,7 +40,6 @@ $session = Yii::$app->session;
     <button type="button" onclick="Make_fake('<?php echo $session['loged_user']?>','<?php echo $model['user_id']?>')" class="btn btn-sm">Fake</button>
     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal"> View </button>
 </div>
-
 
 
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -43,6 +57,16 @@ $session = Yii::$app->session;
                                 </div>
                                 <div class="rela-block profile-name-container">
                                     <div class="rela-block user-name" id="user_name"><?php echo $model['user_name']." ".$model['user_secondname']?></div>
+                                    <div class="rela-block user-name" id="user_description"><?php
+                                        $date_now =  date_create('now',new DateTimeZone('Europe/Kiev'));
+                                        $date_online = date_create_from_format("d.m.y G:i", $model['last_online']);
+                                        $diff = date_diff($date_now, $date_online);
+                                         if ($diff->format('%i%d%D%M%Y') < 150000000) : ?>
+                                            <p><span style="background: rgb(66, 183, 42); border-radius: 50%; display: inline-block; height: 9px; margin-left: 4px; margin-bottom: 2px; width: 9px;"></span> Online</p>
+                                        <?php else: ?>
+                                            <p><span style="background: rgb(255,51, 51); border-radius: 50%; display: inline-block; height: 9px; margin-left: 4px; margin-bottom: 2px; width: 9px;"></span> last seen <?php echo $model['last_online']; ?> </p>
+                                        <?php endif;?>
+                                        </div>
                                     <div class="rela-block user-desc" id="user_description"><?php echo $model['user_country'].", ".$model['user_city']?></div>
                                 </div>
                                 <div class="rela-block profile-card-stats">
