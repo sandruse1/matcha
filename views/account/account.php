@@ -21,6 +21,17 @@ $this->title = $session['loged_user'];
 
 ?>
 <script>
+    function Addtoguests(addto) {
+        $.ajax({
+            url: '<?php echo Yii::$app->request->baseUrl . '/account/addtoguests' ?>',
+            type: 'post',
+            data: {addto: addto},
+            success: function (data) {
+            }
+        });
+    }
+</script>
+<script>
     var latitude = '',
         longitude = '',
         country = '',
@@ -123,6 +134,7 @@ $this->title = $session['loged_user'];
                             <li><a data-toggle="tab" href="#menu2"><i class="fa fa-key fa-lg"></i></a></li>
                             <li><a data-toggle="tab" href="#menu3"><i class="fa fa-picture-o fa-lg"></i></a></li>
                             <li><a data-toggle="tab" href="#menu4"><i class="fa fa-map-marker fa-lg"></i></a></li>
+                            <li><a data-toggle="tab" href="#menu5"><i class="fa fa-list-ul fa-lg"></i></a></li>
                         </ul>
                         <?php if (Yii::$app->session->hasFlash('success')): ?>
                             <div class="alert alert-success alert-dismissible" role="alert">
@@ -351,6 +363,21 @@ $this->title = $session['loged_user'];
                                     </div>
                                 </div>
                                 <div id="map" style="width: 100%; height: 300px;"></div>
+                            </div>
+                            <div id="menu5" class="tab-pane fade">
+                                <div class="form-group text-center">
+                                    <p>List of your guests</p>
+                                </div>
+                                <div class="form-group">
+                                    <?php Pjax::begin();
+                                    echo ListView::widget([
+                                        'dataProvider' => $guest,
+                                        'itemOptions' => ['class' => 'item'],
+                                        'itemView' => 'guestlist',
+                                        'pager' => ['class' => \kop\y2sp\ScrollPager::className()]
+                                    ]);
+                                    Pjax::end();?>
+                                </div>
                             </div>
                         </div>
                     </div>

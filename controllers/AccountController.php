@@ -362,16 +362,17 @@ class AccountController extends Controller
             ],
         ]);
 
-        $noti = Notification::find()->where(['user_id' => $settings->user_id])->asArray()->all();
-        $noti_array = new ArrayDataProvider([
-            'allModels' => $noti,
+        $guests_array = unserialize($settings->user_guest_array);
+
+        $user1 = Profiledata::find()->where(['user_id' => $guests_array])->asArray()->all();
+        $guest = new ArrayDataProvider([
+            'allModels' => $user1,
             'pagination' => [
                 'pageSize' => 5,
                 'validatePage' => false,
             ],
         ]);
-        $session['noti'] = $noti_array;
-        return $this->render('account', compact( 'passwords', 'settings', 'pictures', 'photo', 'dataProvider'));
+        return $this->render('account', compact( 'passwords', 'settings', 'pictures', 'photo', 'dataProvider', 'guest'));
     }
 
     public function actionMessage(){
@@ -384,21 +385,23 @@ class AccountController extends Controller
         $session = Yii::$app->session;
         $session->open();
 
-        FileHelper::createDirectory('./photo');
+
         if ($session['loged_email']) {
             $email = $session['loged_email'];
             $profile = Profiledata::findOne(['user_email' => $email]);
+
             if ($profile->user_profile_complete == 1){
                 $session['user_avatar'] = "photo/".$profile->user_login."/avatar.jpg";
                 $this->redirect('http://localhost:8080/matcha/web/account');
             }
-            FileHelper::createDirectory("./photo/".$profile->user_login);
+
             $profile->facebook = ($profile['user_facebook_id'] == NULL && $profile['user_google_id'] == NULL) ?  0  : 1;
             if ($profile->load(Yii::$app->request->post())) {
 
                 $post = Yii::$app->request->post('Profiledata');
 
                 if ($profile->validate()) {
+                    FileHelper::createDirectory("./photo/".$post['user_login']);
                     $profile->user_name = $post['user_name'];
                     $profile->user_secondname = $post['user_secondname'];
                     if ($profile['user_facebook_id'] != NULL || $profile['user_google_id'] != NULL) {
@@ -561,6 +564,10 @@ class AccountController extends Controller
 
             $user = $this->deleteFromListBlockedUsers($user, $loged_user->user_id);
 
+        foreach ($user as $key => $member) {
+            if ($member['user_login'] == $loged_user->user_login){ unset($user[$key]); }
+        }
+
         $dataProvider = new ArrayDataProvider([
             'allModels' => $user,
             'pagination' => [
@@ -635,9 +642,31 @@ class AccountController extends Controller
         $email = $session['loged_email'];
         $user = Profiledata::findOne(['user_email' => $email]);
 
-        $user->user_online = "onlain";
         $user->last_online = date("d.m.y G:i");
         $user->save();
+    }
+
+   public function actionAddtoguests()
+    {
+        $session = Yii::$app->session;
+        $reqes = Yii::$app->request->post();
+        $add_to = $reqes['addto'];
+
+        $login = $session['loged_user'];
+
+        $user = Profiledata::findOne(['user_login' => $login]);
+
+        $user_add_to = Profiledata::findOne(['user_id' => $add_to]);
+
+        $guests_array_1 = array();
+
+        if ($user_add_to->user_guest_array != NULL) {
+            $guests_array_1 = unserialize($user_add_to->user_guest_array);
+        }
+        $this->addNewNotification($add_to, $login." visit your ptofile at");
+        $guests_array_1[] = $user->user_id;
+        $user_add_to->user_guest_array = serialize($guests_array_1);
+        $user_add_to->save();
     }
 
     public function actionGetnotification(){
@@ -683,8 +712,7 @@ class AccountController extends Controller
     }
 
     public function actionSetasavatar(){
-//        https://upload.wikimedia.org/wikipedia/commons/3/37/No_person.jpg
-//        $profile->user_avatar = 'photo/' . $profile->user_login . "/avatar.jpg";
+
         $reqes = Yii::$app->request->post();
 
         $srctoavatar = $reqes['srctoavatar'];

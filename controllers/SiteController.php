@@ -13,6 +13,8 @@ use yii\filters\VerbFilter;
 use app\models\User;
 use yii\authclient\AuthAction;
 use yii\helpers\Url;
+use yii\helpers\FileHelper;
+
 
 class SiteController extends Controller
 {
@@ -101,7 +103,7 @@ class SiteController extends Controller
         $session = Yii::$app->session;
         $session->open();
         $session->destroy();
-
+        FileHelper::createDirectory('./photo');
         $user_table = Yii::$app->db->createCommand('
           CREATE TABLE IF NOT EXISTS `user` (
           `user_id` INT (11) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -109,7 +111,8 @@ class SiteController extends Controller
           `user_secondname` VARCHAR (100) NOT NULL,
           `user_sex` INT (2),
           `user_friend` INT (10) DEFAULT \'0\',
-          `user_friend_array` VARCHAR (10000),
+          `user_friend_array` VARCHAR (1000),
+          `user_guest_array` VARCHAR (1000),
           `user_about` VARCHAR (1000),
           `user_interest` VARCHAR (1000),
           `user_orientation` INT (2),
@@ -121,7 +124,6 @@ class SiteController extends Controller
           `user_rating` INT (3) DEFAULT \'0\',
           `user_avatar` VARCHAR (255),
           `user_day_of_birth` VARCHAR (15),
-          `user_online` VARCHAR (20),
           `last_online` VARCHAR (30),
           `user_phone` VARCHAR (20),
           `user_photo` VARCHAR (1000),
@@ -235,6 +237,7 @@ class SiteController extends Controller
                     $user->user_password = Yii::$app->getSecurity()->generatePasswordHash($user->user_password);
                     $user->user_rep_password = $user->user_password;
                     $user->save(false);
+                    FileHelper::createDirectory("./photo/".$post['user_login']);
                     Yii::$app->session->setFlash('success', 'You have successfully signed up, now you can login to Matcha');
                     return $this->refresh();
                 }else {

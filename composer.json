@@ -30,6 +30,7 @@
         "yii-dream-team/yii2-upload-behavior": "*",
         "kartik-v/yii2-slider": "dev-master",
         "kop/yii2-scroll-pager": "dev-master",
+        "bubasuma/yii2-simplechat": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

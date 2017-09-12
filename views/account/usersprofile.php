@@ -38,7 +38,7 @@ $session = Yii::$app->session;
     <button type="button" onclick="Make_dislike('<?php echo $session['loged_user']?>','<?php echo $model['user_id']?>')" class="btn btn-danger btn-sm">Dislike</button>
     <button type="button" onclick="Make_block('<?php echo $session['loged_user']?>','<?php echo $model['user_id']?>')" class="btn btn-warning btn-sm">Block</button>
     <button type="button" onclick="Make_fake('<?php echo $session['loged_user']?>','<?php echo $model['user_id']?>')" class="btn btn-sm">Fake</button>
-    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal"> View </button>
+    <button type="button" onclick="Addtoguests(<?php echo $model['user_id']?>)" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal"> View </button>
 </div>
 
 

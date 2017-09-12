@@ -51,7 +51,18 @@ $onChangeJs_age= <<<JS
                              }
 JS;
 ?>
+<script>
+    function Addtoguests(addto) {
+        $.ajax({
+            url: '<?php echo Yii::$app->request->baseUrl . '/account/addtoguests' ?>',
+            type: 'post',
+            data: {addto: addto},
+            success: function (data) {
 
+            }
+        });
+    }
+</script>
 <script>
     function Make_like(loged_user, licked)
     {
