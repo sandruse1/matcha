@@ -29,7 +29,6 @@ $session = Yii::$app->session;
             <?php endif;?>
             <p><?php echo $model['user_country'].", ".$model['user_city']?>, Age : <?php echo $model['user_age']?> | Rating : <?php echo $model['user_rating']?></p>
             <button type="button" onclick="Addtoguests(<?php echo $model['user_id']?>)" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal"> View </button>
-            <button type="button" onclick="" class="btn btn-sm">Chat</button>
         </div>
 
 </div>

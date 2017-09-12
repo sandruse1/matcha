@@ -186,6 +186,17 @@ class SiteController extends Controller
         ');
         $user_notification_table->query();
 
+        $user_notification_table = Yii::$app->db->createCommand('
+          CREATE TABLE IF NOT EXISTS `chat` (
+         `user_id_min` INT (4) NOT NULL,
+         `user_id_max` INT (4) NOT NULL,
+         `user_from` VARCHAR (1000) ,
+          `user_notification_list` VARCHAR (10000),
+          `user_notification_time_list` VARCHAR (10000),
+           PRIMARY KEY (`user_id_min`)) ENGINE=InnoDB DEFAULT CHARSET=utf8
+        ');
+        $user_notification_table->query();
+
         return $this->render('index');
     }
 

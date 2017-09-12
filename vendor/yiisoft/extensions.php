@@ -157,4 +157,31 @@ return array (
       '@yii/debug' => $vendorDir . '/yiisoft/yii2-debug',
     ),
   ),
+  'bubasuma/yii2-simplechat' => 
+  array (
+    'name' => 'bubasuma/yii2-simplechat',
+    'version' => '2.0.0.0',
+    'alias' => 
+    array (
+      '@bubasuma/simplechat' => $vendorDir . '/bubasuma/yii2-simplechat',
+    ),
+  ),
+  'kartik-v/yii2-helpers' => 
+  array (
+    'name' => 'kartik-v/yii2-helpers',
+    'version' => '1.3.6.0',
+    'alias' => 
+    array (
+      '@kartik/helpers' => $vendorDir . '/kartik-v/yii2-helpers',
+    ),
+  ),
+  'sintret/yii2-chat-adminlte' => 
+  array (
+    'name' => 'sintret/yii2-chat-adminlte',
+    'version' => '1.0.0.0',
+    'alias' => 
+    array (
+      '@sintret/chat' => $vendorDir . '/sintret/yii2-chat-adminlte',
+    ),
+  ),
 );

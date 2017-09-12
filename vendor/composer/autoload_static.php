@@ -31,6 +31,10 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
             'yii\\authclient\\' => 15,
             'yii\\' => 4,
         ),
+        's' => 
+        array (
+            'sintret\\chat\\' => 13,
+        ),
         'r' => 
         array (
             'rmrevin\\yii\\fontawesome\\' => 24,
@@ -53,6 +57,7 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
             'kop\\y2sp\\' => 9,
             'kmarenov\\instagram\\' => 19,
             'kartik\\slider\\' => 14,
+            'kartik\\helpers\\' => 15,
             'kartik\\base\\' => 12,
         ),
         'd' => 
@@ -63,6 +68,10 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
         'c' => 
         array (
             'cebe\\markdown\\' => 14,
+        ),
+        'b' => 
+        array (
+            'bubasuma\\simplechat\\' => 20,
         ),
         'W' => 
         array (
@@ -158,6 +167,10 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2',
         ),
+        'sintret\\chat\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/sintret/yii2-chat-adminlte',
+        ),
         'rmrevin\\yii\\fontawesome\\' => 
         array (
             0 => __DIR__ . '/..' . '/rmrevin/yii2-fontawesome',
@@ -192,6 +205,10 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-slider',
         ),
+        'kartik\\helpers\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-helpers',
+        ),
         'kartik\\base\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-krajee-base',
@@ -207,6 +224,10 @@ class ComposerStaticInitc22a6a76a7e576c519fe0104bbd8dbd7
         'cebe\\markdown\\' => 
         array (
             0 => __DIR__ . '/..' . '/cebe/markdown',
+        ),
+        'bubasuma\\simplechat\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/bubasuma/yii2-simplechat',
         ),
         'Webmozart\\Assert\\' => 
         array (

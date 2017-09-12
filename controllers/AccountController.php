@@ -10,12 +10,14 @@ namespace app\controllers;
 
 use app\models\Accountpass;
 use app\models\Accountset;
+use app\models\Chat;
 use app\models\Notification;
 use app\models\Photo;
 use app\models\Profiledata;
 use app\models\Search;
 use app\models\User_user;
 use kossmoss\GoogleMaps\GoogleMaps;
+use phpDocumentor\Reflection\Types\Null_;
 use Yii;
 use yii\data\ArrayDataProvider;
 use yii\helpers\FileHelper;
@@ -23,6 +25,7 @@ use yii\web\Controller;
 use yii\web\UploadedFile;
 use yii\data\ActiveDataProvider;
 use yii\i18n\Formatter;
+
 
 define('EARTH_RADIUS', 6372795);
 
@@ -378,7 +381,91 @@ class AccountController extends Controller
     public function actionMessage(){
         $this->resetSearchData();
 
-        return $this->render('message');
+        $session = Yii::$app->session;
+        $email = $session['loged_email'];
+        $loged_user = Profiledata::findOne(['user_email' => $email]);
+        $friend_array = unserialize($loged_user->user_friend_array);
+        $user = Profiledata::find()->where(['user_id' => $friend_array])->asArray()->all();
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $user,
+            'pagination' => [
+                'pageSize' => 20,
+                'validatePage' => false,
+            ],
+        ]);
+
+        return $this->render('message', compact( 'dataProvider'));
+    }
+
+    function actionAddnewmessage(){
+
+        $reqes = Yii::$app->request->post();
+
+        $text = $reqes['text'];
+        $user = Profiledata::findOne(['user_login' => $reqes['loged_user']]);
+
+        $loged_user_id = $user->user_id;
+        $chat_with_id = $reqes['id_chatwith'];
+
+        $id_max = ($loged_user_id < $chat_with_id) ? $chat_with_id :$loged_user_id;
+        $id_min = ($loged_user_id < $chat_with_id) ? $loged_user_id :$chat_with_id;
+
+        if (Chat::findOne(['user_id_min' => $id_min, 'user_id_max' => $id_max])) {
+            $user1 = Chat::findOne(['user_id_min' => $id_min, 'user_id_max' => $id_max]);
+        } else {
+            $user1 = new Chat();
+            $user1->user_id_min = $id_min;
+            $user1->user_id_max = $id_max;
+        }
+
+        $notification_array_1 = array();
+        $time_array = array();
+        $from_array = array();
+
+        if ($user1->user_notification_list != NULL) {
+            $notification_array_1 = unserialize($user1->user_notification_list);
+            $time_array = unserialize($user1->user_notification_time_list);
+            $from_array = unserialize($user1->user_from);
+        }
+        $notification_array_1[] = $text;
+        $time_array[] = date("d.m.y G:i:s");
+        $from_array[] = $reqes['loged_user']." ".$user->user_avatar;
+
+
+        $user1->user_notification_list = serialize($notification_array_1);
+        $user1->user_from = serialize($from_array);
+        $user1->user_notification_time_list = serialize($time_array);
+
+        $user1->save(false);
+
+    }
+
+    public function actionGetmessage(){
+        $reqes = Yii::$app->request->post();
+
+        $user = Profiledata::findOne(['user_login' => $reqes['loged_user']]);
+        $user_chat_with = Profiledata::findOne(['user_id' => $reqes['id_chatwith']]);
+        $loged_user_id = $user->user_id;
+        $chat_with_id = $reqes['id_chatwith'];
+
+        $id_max = ($loged_user_id < $chat_with_id) ? $chat_with_id :$loged_user_id;
+        $id_min = ($loged_user_id < $chat_with_id) ? $loged_user_id :$chat_with_id;
+
+        if (Chat::findOne(['user_id_min' => $id_min, 'user_id_max' => $id_max])) {
+            $user_user_chat = Chat::find()->where(['user_id_min' => $id_min, 'user_id_max' => $id_max])->asArray()->one();
+
+            $chat = array();
+            $user_chat_list = unserialize($user_user_chat['user_notification_list']) ;
+            $user_chat_time_list = unserialize($user_user_chat['user_notification_time_list']);
+            $from = unserialize($user_user_chat['user_from']);
+            foreach ($user_chat_list as $key => $noti){
+                $chat[] = $noti." ".$user_chat_time_list[$key]." ".$from[$key]." .";
+            }
+            echo json_encode($chat);
+        } else {
+            echo 0;
+        }
+
     }
 
     public function actionProfiledata(){
@@ -401,7 +488,7 @@ class AccountController extends Controller
                 $post = Yii::$app->request->post('Profiledata');
 
                 if ($profile->validate()) {
-                    FileHelper::createDirectory("./photo/".$post['user_login']);
+                    FileHelper::createDirectory("./photo/".$profile->user_login);
                     $profile->user_name = $post['user_name'];
                     $profile->user_secondname = $post['user_secondname'];
                     if ($profile['user_facebook_id'] != NULL || $profile['user_google_id'] != NULL) {
